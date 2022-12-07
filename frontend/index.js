@@ -1,384 +1,527 @@
-google.charts.load('current', {
-    'packages': ['corechart', 'bar']
+google.charts.load("current", {
+    packages: ["corechart", "bar"],
 });
 google.charts.setOnLoadCallback(loadTable);
 
 function loadTable() {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/slist");
+    const uri = "http://localhost:3000/brainstroke";
+    xhttp.open("GET", uri);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var trHTML = '';
+            var trHTML = "";
             var num = 1;
             const objects = JSON.parse(this.responseText);
-            for (let object of objects) {
+            console.log(objects);
 
-                trHTML += '<tr>';
-                trHTML += '<td>' + num + '</td>';
-                trHTML += '<td>' + object['StudentID'] + '</td>';
-                trHTML += '<td>' + object['Title'] + '</td>';
-                trHTML += '<td>' + object['Name'] + '</td>';
-                trHTML += '<td>' + object['Surname'] + '</td>';
-                trHTML += '<td>' + object['Field'] + '</td>';
-                trHTML += '<td>' + object['Project'] + '</td>';
-                trHTML += '<td>' + object['Savings'] + '</td>';
-                trHTML += '<td>' + object['GPA'] + '</td>';
-                trHTML += '<td>' + object['Salary'] + '</td>';
-                trHTML += '<td>';
-                trHTML += '<a type="button" class="btn btn-outline-secondary" onclick="showCompliantEditBox(\'' + object['_id'] + '\')"><i class="fas fa-edit"></i></a>';
-                trHTML += '<a type="button" class="btn btn-outline-danger" onclick="compliantDelete(\'' + object['_id'] + '\')"><i class="fas fa-trash"></i></a></td>';
-                trHTML += "</tr>";
+            for (let object of objects) {
+                trHTML += "<tr>";
+                trHTML += "<td>" + num + "</td>";
+                trHTML += "<td>" + object["gender"] + "</td>";
+                trHTML += "<td>" + object["age"] + "</td>";
+                trHTML += "<td>" + object["hypertension"] + "</td>";
+                trHTML += "<td>" + object["heart_disease"] + "</td>";
+                trHTML += "<td>" + object["ever_married"] + "</td>";
+                trHTML += "<td>" + object["work_type"] + "</td>";
+                trHTML += "<td>" + object["Residence_type"] + "</td>";
+                trHTML += "<td>" + object["avg_glucose_level"] + "</td>";
+                trHTML += "<td>" + object["bmi"] + "</td>";
+                trHTML += "<td>" + object["smoking_status"] + "</td>";
+                trHTML += "<td>" + object["stroke"] + "</td>";
+                trHTML += "<td>";
+                trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showStudentUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
+                trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showStudentDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
+                trHTML += "<tr>";
 
                 num++;
             }
             document.getElementById("mytable").innerHTML = trHTML;
-            document.getElementById("counter").innerHTML = "จำนวนรายการ "+(num-1);
+            document.getElementById("HeadText").innerText = "Brain Stroke Infomation (จำนวน " + (num - 1) + " รายการ)"
 
-            loadGraph();
+            loadGraph(objects);
         }
     };
 }
 
 function loadQueryTable() {
-    document.getElementById("mytable").innerHTML = "<tr><th scope=\"row\" colspan=\"5\">Loading...</th></tr>";
-    const CheckText = document.getElementById('searchTextBox').value;
-    if (CheckText == "") {
-        loadTable()
-    } else {
-        console.log("searchText not null")
-        const searchText = document.getElementById('searchTextBox').value;
-
+    document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5">Loading...</th></tr>';
+    var searchText = document.getElementById("searchTextBox").value;
+    if (searchText != "") {
         const xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "http://localhost:3000/slist/find/" + searchText);
+        const uri = "http://localhost:3000/brainstroke/search/" + searchText;
+        xhttp.open("GET", uri);
         xhttp.send();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                var trHTML = '';
+                var trHTML = "";
                 var num = 1;
                 const objects = JSON.parse(this.responseText).Complaint;
                 for (let object of objects) {
-                    trHTML += '<tr>';
-                    trHTML += '<td>' + num + '</td>';
-                    trHTML += '<td>' + object['StudentID'] + '</td>';
-                    trHTML += '<td>' + object['Title'] + '</td>';
-                    trHTML += '<td>' + object['Name'] + '</td>';
-                    trHTML += '<td>' + object['Surname'] + '</td>';
-                    trHTML += '<td>' + object['Field'] + '</td>';
-                    trHTML += '<td>' + object['Project'] + '</td>';
-                    trHTML += '<td>' + object['Savings'] + '</td>';
-                    trHTML += '<td>' + object['GPA'] + '</td>';
-                    trHTML += '<td>' + object['Salary'] + '</td>';
-                    trHTML += '<td>';
-                    trHTML += '<a type="button" class="btn btn-outline-secondary" onclick="showCompliantEditBox(\'' + object['_id'] + '\')"><i class="fas fa-edit"></i></a>';
-                    trHTML += '<a type="button" class="btn btn-outline-danger" onclick="compliantDelete(\'' + object['_id'] + '\')"><i class="fas fa-trash"></i></a></td>';
-                    trHTML += "</tr>";
+                    trHTML += "<tr>";
+                    trHTML += "<td>" + num + "</td>";
+                    trHTML += "<td>" + object["gender"] + "</td>";
+                    trHTML += "<td>" + object["age"] + "</td>";
+                    trHTML += "<td>" + object["hypertension"] + "</td>";
+                    trHTML += "<td>" + object["heart_disease"] + "</td>";
+                    trHTML += "<td>" + object["ever_married"] + "</td>";
+                    trHTML += "<td>" + object["work_type"] + "</td>";
+                    trHTML += "<td>" + object["Residence_type"] + "</td>";
+                    trHTML += "<td>" + object["avg_glucose_level"] + "</td>";
+                    trHTML += "<td>" + object["bmi"] + "</td>";
+                    trHTML += "<td>" + object["smoking_status"] + "</td>";
+                    trHTML += "<td>" + object["stroke"] + "</td>";
+                    trHTML += "<td>";
+                    trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showStudentUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
+                    trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showStudentDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
+                    trHTML += "<tr>";
+
+
                     num++;
-
-
                 }
                 console.log(trHTML);
                 document.getElementById("mytable").innerHTML = trHTML;
-                document.getElementById("counter").innerHTML = "จำนวนรายการ "+(num-1);
+                document.getElementById("HeadText").innerText = "Brain Stroke Infomation (จำนวน " + (num - 1) + " รายการ)"
 
+                loadGraph(objects);
             }
         };
+    } else {
+        loadTable()
     }
+
 }
 
-function loadGraph() {
+function loadGraph(objects) {
+    var maleCount = 0
+    var femaleCount = 0
+
+    var neversmokeCount = 0
+    var formerlysmokeCount = 0
+    var unknownCount = 0
+    var normalsmoke = 0
+
     var mlCount = 0;
     var fullsCount = 0;
     var sysCount = 0;
     var netwCount = 0;
-  
+
     var mrCount = 0;
     var missCount = 0;
     var drCount = 0;
     var pfCount = 0;
-  
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/slist");
-    xhttp.send();
-    xhttp.onreadystatechange = function () {
-      if (this.readyState == 4 && this.status == 200) {
-        const objects = JSON.parse(this.responseText);
-        for (let object of objects) {
-          switch (object["Project"]) {
+
+    for (let object of objects) {
+        switch (object["Project"]) {
             case "Machine Learning":
-              mlCount = mlCount + 1;
-              break;
+                mlCount = mlCount + 1;
+                break;
             case "Fullstack":
-              fullsCount = fullsCount + 1;
-              break;
-  
+                fullsCount = fullsCount + 1;
+                break;
+
             case "System Design":
-              sysCount = sysCount + 1;
-              break;
-  
+                sysCount = sysCount + 1;
+                break;
+
             case "Networks":
-              netwCount = netwCount + 1;
-              break;
-          }
-  
-          switch (object["Title"]) {
-            case "นาย":
-              mrCount = mrCount + 1;
-              break;
-            case "นางสาว":
-              missCount = missCount + 1;
-              break;
-  
-            case "ดร.":
-              drCount = drCount + 1;
-              break;
-  
-            case "ศ.ดร":
-              pfCount = pfCount + 1;
-              break;
-          }
+                netwCount = netwCount + 1;
+                break;
         }
-  
-        var TimelyResponseData = google.visualization.arrayToDataTable([
-          ["Project", "Field"],
-          ["Machine Learning", mlCount],
-          ["Fullstack", fullsCount],
-          ["System Design", sysCount],
-          ["Networks", netwCount],
-        ]);
-  
-        var optionsTimelyResponse = { Titil: "Overall Project Fields" };
-        var chartTimelyResponse = new google.visualization.PieChart(document.getElementById("piechartTimelyResponse"));
-        chartTimelyResponse.draw(TimelyResponseData, optionsTimelyResponse);
-  
-        var dataSubmitted = google.visualization.arrayToDataTable([
-          [
+
+        switch (object["smoking_status"]) {
+            case "formerly smoked":
+                formerlysmokeCount = formerlysmokeCount + 1
+                break
+            case "never smoked":
+                neversmokeCount = neversmokeCount + 1
+                break
+            case "Unknown":
+                unknownCount = unknownCount + 1
+                break
+            case "smokes":
+                normalsmoke = normalsmoke + 1
+        }
+
+        switch (object["gender"]) {
+            case "Male":
+                maleCount = maleCount + 1
+                break
+            case "Female":
+                femaleCount = femaleCount + 1
+        }
+
+        switch (object["Title"]) {
+            case "นาย":
+                mrCount = mrCount + 1;
+                break;
+            case "นางสาว":
+                missCount = missCount + 1;
+                break;
+
+            case "ดร.":
+                drCount = drCount + 1;
+                break;
+
+            case "ศ.ดร":
+                pfCount = pfCount + 1;
+                break;
+        }
+    }
+    // Graph1
+    var TimelyResponseData = google.visualization.arrayToDataTable([
+        ["Project", "Field"],
+        ["Machine Learning", mlCount],
+        ["Fullstack", fullsCount],
+        ["System Design", sysCount],
+        ["Networks", netwCount],
+        ["Male", maleCount],
+        ["Female", femaleCount]
+    ]);
+
+    var optionsTimelyResponse = {
+        Titil: "Overall Project Fields",
+        legentFontSize: 15,
+        fontSize: 12,
+        titleFontSize: 15,
+        tooltipFontSize: 15,
+        is3D: true
+    };
+    var chartTimelyResponse = new google.visualization.PieChart(
+        document.getElementById("piechartTimelyResponse")
+    );
+    chartTimelyResponse.draw(TimelyResponseData, optionsTimelyResponse);
+
+    //graph2
+    var testchartdata = google.visualization.arrayToDataTable([
+        ["Project", "Field"],
+        ["Machine Learning", mlCount],
+        ["Fullstack", fullsCount],
+        ["System Design", sysCount],
+        ["Networks", netwCount],
+        ["Male", maleCount],
+        ["Female", femaleCount]
+    ]);
+
+    var optionstest = {
+        Titil: "Overall Project Fields",
+        legentFontSize: 15,
+        fontSize: 12,
+        titleFontSize: 15,
+        tooltipFontSize: 15,
+        is3D: true
+    };
+    var charttest = new google.visualization.PieChart(
+        document.getElementById("testchart")
+    );
+    charttest.draw(testchartdata, optionstest);
+
+
+
+    ////////////////////
+
+    var dataSubmitted = google.visualization.arrayToDataTable([
+        [
             "Student Titile",
             "Number",
             {
-              role: "style",
+                role: "style",
             },
             {
-              role: "annotation",
+                role: "annotation",
             },
-          ],
-          ["นาย", mrCount, "gold", "นาย"],
-          ["นางสาว", missCount, "color: #F65A83", "นางสาว"],
-          ["ดร.", drCount, "color: #F9F5EB", "ดร."],
-          ["ศ.ดร", pfCount, "color: #607EAA", "ศ.ดร"]
-        ]);
-  
-        var optionSubmitted = {
-          title: "Staff' Title",
-          legend: { position: "none" },
-        };
-  
-        var chartSubmitted = new google.visualization.BarChart(document.getElementById("barchartSubmitted") );
-        chartSubmitted.draw(dataSubmitted, optionSubmitted);
-      }
+        ],
+        ["Formerly", formerlysmokeCount, "gold", "formerly"],
+        ["Smokes", normalsmoke, "color: #F65A83", "Smokes"],
+        ["Never.", neversmokeCount, "color: #ff6f00", "Never."],
+        ["Unknown", unknownCount, "color: #607EAA", "Unknown"],
+    ]);
+
+    var optionSubmitted = {
+        title: "Smoking",
+        legend: { position: "none" },
+        legentFontSize: 15,
+        fontSize: 15,
+        titleFontSize: 15,
+        tooltipFontSize: 15
     };
-  }
-  
 
-function showCompliantCreateBox() {
+    var chartSubmitted = new google.visualization.BarChart(
+        document.getElementById("barchartSubmitted")
+    );
+    chartSubmitted.draw(dataSubmitted, optionSubmitted);
+}
 
+function showStudentCreateBox() {
     var d = new Date();
-    const date = d.toISOString().split('T')[0]
+    const date = d.toISOString().split("T")[0];
 
     Swal.fire({
-        title: 'Create Compliant',
-        html: '<input id="Date_received" class="swal2-input" placeholder="Product" type="hidden" value="' + date + '">' +
-            '<div class="mb-3"><label for="StudentID" class="form-label">StudentID</label>' +
-            '<input class="form-control" id="StudentID" placeholder="Student ID"></div>' +
-            '<div class="mb-3"><label for="Title" class="form-label">Title</label>' +
-            '<input class="form-control" id="Title" placeholder="Title"></div>' +
-            '<div class="mb-3"><label for="Name" class="form-label">Name</label>' +
-            '<input class="form-control" id="Name" placeholder="Name"></div>' +
-            '<div class="mb-3"><label for="Surname" class="form-label">Surname</label>' +
-            '<input class="form-control" id="Surname" placeholder="Surname"></div>' +
-            '<div class="mb-3"><label for="Field" class="form-label">Field</label>' +
-            '<input class="form-control" id="Field" placeholder="Field"></div>' +
-            '<div class="mb-3"><label for="Project" class="form-label">Project</label>' +
-            '<input class="form-control" id="Project" placeholder="Project"></div>' +
-            '<div class="mb-3"><label for="Savings" class="form-label">Savings</label>' +
-            '<input class="form-control" id="Savings" placeholder="Savings"></div>' +
-            '<div class="mb-3"><label for="GPA" class="form-label">GPA</label>' +
-            '<input class="form-control" id="GPA" placeholder="GPA"></div>' +
-            '<div class="mb-3"><label for="Salary" class="form-label">Salary</label>' +
-            '<input class="form-control" id="Salary" placeholder="Salary"></div>',
+        title: "Create Student Transaction",
+        html:
+
+            '<div class="mb-3"><label for="gender" class="form-label">Gender</label>' +
+            '<input class="form-control" id="gender" placeholder="gender"></div>' +
+
+            '<div class="mb-3"><label for="age" class="form-label">Age</label>' +
+            '<input class="form-control" id="age" placeholder="age"></div>' +
+
+            '<div class="mb-3"><label for="hypertension" class="form-label">Hypertension</label>' +
+            '<input class="form-control" id="hypertension" placeholder="hypertension (0 or 1)"></div>' +
+
+            '<div class="mb-3"><label for="heart_disease" class="form-label">Heart disease</label>' +
+            '<input class="form-control" id="heart_disease" placeholder="heart disease (0 or 1)"></div>' +
+
+            '<div class="mb-3"><label for="ever_married" class="form-label">Ever_married</label>' +
+            '<input class="form-control" id="ever_married" placeholder="ever_married (Yes or No)"></div>' +
+
+            '<div class="mb-3"><label for="work_type" class="form-label">Work_type</label>' +
+            '<input class="form-control" id="work_type" placeholder="work_type"></div>' +
+
+            '<div class="mb-3"><label for="Residence_type" class="form-label">Residence_type</label>' +
+            '<input class="form-control" id="Residence_type" placeholder="Residence_type"></div>' +
+
+            '<div class="mb-3"><label for="avg_glucose_level" class="form-label">avg_glucose_level</label>' +
+            '<input class="form-control" id="avg_glucose_level" placeholder="avg_glucose_level"></div>' +
+
+            '<div class="mb-3"><label for="bmi" class="form-label">bmi</label>' +
+            '<input class="form-control" id="bmi" placeholder="bmi"></div>' +
+
+            '<div class="mb-3"><label for="smoking_status" class="form-label">smoking_status</label>' +
+            '<input class="form-control" id="smoking_status" placeholder="smoking_status"></div>' +
+
+            '<div class="mb-3"><label for="stroke" class="form-label">stroke</label>' +
+            '<input class="form-control" id="stroke" placeholder="stroke"></div>',
 
         focusConfirm: false,
         preConfirm: () => {
-            compliantCreate();
-        }
+            slistCreate();
+        },
     });
 }
 
-function compliantCreate() {
+function slistCreate() {
+    const gender = document.getElementById("gender").value;
+    const age = document.getElementById("age").value;
+    const hypertension = document.getElementById("hypertension").value;
+    const heart_disease = document.getElementById("heart_disease").value;
+    const ever_married = document.getElementById("ever_married").value;
+    const work_type = document.getElementById("work_type").value;
+    const Residence_type = document.getElementById("Residence_type").value;
+    const avg_glucose_level = document.getElementById("avg_glucose_level").value;
+    const bmi = document.getElementById("bmi").value;
+    const smoking_status = document.getElementById("smoking_status").value;
+    const stroke = document.getElementById("stroke").value;
 
-    const Date_received = document.getElementById("Date_received").value;
-    const StudentID = document.getElementById("StudentID").value;
-    const Title = document.getElementById("Title").value;
-    const Name = document.getElementById("Name").value;
-    const Surname = document.getElementById("Surname").value;
-    const Field = document.getElementById("Field").value;
-    const Project = document.getElementById("Project").value;
-    const Savings = document.getElementById("Savings").value;
-    const GPA = document.getElementById("GPA").value;
-    const Salary = document.getElementById("Salary").value;
-
-    console.log(JSON.stringify({
-        'Date received': Date_received,
-        'StudentID': StudentID,
-        'Title': Title,
-        'Name': Name,
-        'Surname': Surname,
-        'Field': Field,
-        'Project': Project,
-        'Savings': Savings,
-        'GPA': GPA,
-        'Salary': Salary
-    }));
+    console.log(
+        JSON.stringify({
+            gender: gender,
+            age: age,
+            hypertension: hypertension,
+            heart_disease: heart_disease,
+            ever_married: ever_married,
+            work_type: work_type,
+            Residence_type: Residence_type,
+            avg_glucose_level: avg_glucose_level,
+            bmi: bmi,
+            smoking_status: smoking_status,
+            stroke: stroke,
+        })
+    );
 
     const xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "http://localhost:3000/slist/create/");
+    xhttp.open("POST", "http://localhost:3000/brainstroke/create");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send(JSON.stringify({
-        'Date received': Date_received,
-        'StudentID': StudentID,
-        'Title': Title,
-        'Name': Name,
-        'Surname': Surname,
-        'Field': Field,
-        'Project': Project,
-        'Savings': Savings,
-        'GPA': GPA,
-        'Salary': Salary
-    }));
+    xhttp.send(
+        JSON.stringify({
+            gender: gender,
+            age: age,
+            hypertension: hypertension,
+            heart_disease: heart_disease,
+            ever_married: ever_married,
+            work_type: work_type,
+            Residence_type: Residence_type,
+            avg_glucose_level: avg_glucose_level,
+            bmi: bmi,
+            smoking_status: smoking_status,
+            stroke: stroke,
+        })
+    );
+
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const objects = JSON.parse(this.responseText);
             Swal.fire(
-                'Good job!',
-                'Create Compliant Successfully!',
-                'success'
+                "Good job!",
+                "Create Student Information Successfully!",
+                "success"
             );
             loadTable();
         }
     };
 }
 
-function compliantDelete(id) {
+function showStudentDeleteBox(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            studentDelete(id);
+            Swal.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+            )
+        }
+    })
+
+}
+
+function studentDelete(id) {
     console.log("Delete: ", id);
     const xhttp = new XMLHttpRequest();
-    xhttp.open("DELETE", "http://localhost:3000/slist/delete");
+    xhttp.open("DELETE", "http://localhost:3000/brainstroke/delete");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send(JSON.stringify({
-        "_id": id
-    }));
+    xhttp.send(
+        JSON.stringify({
+            _id: id,
+        })
+    );
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             const objects = JSON.parse(this.responseText);
             Swal.fire(
-                'Good job!',
-                'Delete Compliant Successfully!',
-                'success'
+                "Good job!",
+                "Delete Student Information Successfully!",
+                "success"
             );
             loadTable();
         }
     };
 }
 
-function showCompliantEditBox(id) {
-
+function showStudentUpdateBox(id) {
     console.log("edit", id);
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", "http://localhost:3000/slist/" + id);
+    xhttp.open("GET", "http://localhost:3000/brainstroke/" + id);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            const object = JSON.parse(this.responseText).object;
-            console.log("showCompliantEditBox", object);
+            const object = JSON.parse(this.responseText).Complaint;
+            console.log("showStudentUpdateBox", object);
             Swal.fire({
-                title: 'Edit Compliant',
-                html: '<input id="id" class="swal2-input" type="hidden" value="' + object['_id'] + '"><br>' +
-                    '<div class="mb-3"><label for="StudentID"  class="form-label">StudentID</label>' +
-                    '<input class="form-control" id="StudentID" value="' + object['StudentID'] + '" placeholder="Student ID"></div>' +
-                    '<div class="mb-3"><label for="Title" class="form-label">Title</label>' +
-                    '<input class="form-control" id="Title" value="' + object['Title'] + '" placeholder="Title"></div>' +
-                    '<div class="mb-3"><label for="Name" class="form-label">Name</label>' +
-                    '<input class="form-control" id="Name" value="' + object['Name'] + '" placeholder="Name"></div>' +
-                    '<div class="mb-3"><label for="Surname" class="form-label">Surname</label>' +
-                    '<input class="form-control" id="Surname" value="' + object['Surname'] + '" placeholder="Surname"></div>' +
-                    '<div class="mb-3"><label for="Field" class="form-label">Field</label>' +
-                    '<input class="form-control" id="Field" value="' + object['Field'] + '" placeholder="Field"></div>' +
-                    '<div class="mb-3"><label for="Project" class="form-label">Project</label>' +
-                    '<input class="form-control" id="Project" value="' + object['Project'] + '" placeholder="Project"></div>' +
-                    '<div class="mb-3"><label for="Savings" class="form-label">Savings</label>' +
-                    '<input class="form-control" id="Savings" value="' + object['Savings'] + '" placeholder="Savings"></div>' +
-                    '<div class="mb-3"><label for="GPA" class="form-label">GPA</label>' +
-                    '<input class="form-control" id="GPA" value="' + object['GPA'] + '" placeholder="GPA"></div>' +
-                    '<div class="mb-3"><label for="Salary" class="form-label">Salary</label>' +
-                    '<input class="form-control" id="Salary" value="' + object['Salary'] + '" placeholder="Salary"></div>',
+                title: "Update Student Transaction",
+                html:
+                    '<div class="mb-3"><label for="id" class="form-label">id</label>' +
+                    '<input class="form-control" id="id" placeholder="id" value="' + object["_id"] + '" readonly></div>' +
 
+                    '<div class="mb-3"><label for="gender" class="form-label">Gender</label>' +
+                    '<input class="form-control" id="gender" placeholder="gender" value="' + object["gender"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="age" class="form-label">Age</label>' +
+                    '<input class="form-control" id="age" placeholder="age" value="' + object["age"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="hypertension" class="form-label">Hypertension</label>' +
+                    '<input class="form-control" id="hypertension" placeholder="hypertension (0 or 1)" value="' + object["hypertension"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="heart_disease" class="form-label">Heart disease</label>' +
+                    '<input class="form-control" id="heart_disease" placeholder="heart disease (0 or 1)" value="' + object["heart_disease"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="ever_married" class="form-label">Ever_married</label>' +
+                    '<input class="form-control" id="ever_married" placeholder="ever_married (Yes or No)" value="' + object["ever_married"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="work_type" class="form-label">Work_type</label>' +
+                    '<input class="form-control" id="work_type" placeholder="work_type" value="' + object["work_type"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="Residence_type" class="form-label">Residence_type</label>' +
+                    '<input class="form-control" id="Residence_type" placeholder="Residence_type" value="' + object["Residence_type"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="avg_glucose_level" class="form-label">avg_glucose_level</label>' +
+                    '<input class="form-control" id="avg_glucose_level" placeholder="avg_glucose_level" value="' + object["avg_glucose_level"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="bmi" class="form-label">bmi</label>' +
+                    '<input class="form-control" id="bmi" placeholder="bmi" value="' + object["bmi"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="smoking_status" class="form-label">smoking_status</label>' +
+                    '<input class="form-control" id="smoking_status" placeholder="smoking_status" value="' + object["smoking_status"] + '"></div>' +
+
+                    '<div class="mb-3"><label for="stroke" class="form-label">stroke</label>' +
+                    '<input class="form-control" id="stroke" placeholder="stroke" value="' + object["stroke"] + '"></div>',
 
                 focusConfirm: false,
                 preConfirm: () => {
-                    userEdit();
-                }
+                    studentUpdate();
+                },
             });
         }
     };
 }
 
-function userEdit() {
+function studentUpdate() {
     const id = document.getElementById("id").value;
-    const StudentID = document.getElementById("StudentID").value;
-    const Title = document.getElementById("Title").value;
-    const Name = document.getElementById("Name").value;
-    const Surname = document.getElementById("Surname").value;
-    const Field = document.getElementById("Field").value;
-    const Project = document.getElementById("Project").value;
-    const Savings = document.getElementById("Savings").value;
-    const GPA = document.getElementById("GPA").value;
-    const Salary = document.getElementById("Salary").value;
+    const gender = document.getElementById("gender").value;
+    const age = document.getElementById("age").value;
+    const hypertension = document.getElementById("hypertension").value;
+    const heart_disease = document.getElementById("heart_disease").value;
+    const ever_married = document.getElementById("ever_married").value;
+    const work_type = document.getElementById("work_type").value;
+    const Residence_type = document.getElementById("Residence_type").value;
+    const avg_glucose_level = document.getElementById("avg_glucose_level").value;
+    const bmi = document.getElementById("bmi").value;
+    const smoking_status = document.getElementById("smoking_status").value;
+    const stroke = document.getElementById("stroke").value;
 
-    console.log(JSON.stringify({
-        "_id": id,
-        'StudentID': StudentID,
-        'Title': Title,
-        'Name': Name,
-        'Surname': Surname,
-        'Field': Field,
-        'Project': Project,
-        'Savings': Savings,
-        'GPA': GPA,
-        'Salary': Salary
-    }));
+    console.log(
+        JSON.stringify({
+            _id: id,
+            gender: gender,
+            age: age,
+            hypertension: hypertension,
+            heart_disease: heart_disease,
+            ever_married: ever_married,
+            work_type: work_type,
+            Residence_type: Residence_type,
+            avg_glucose_level: avg_glucose_level,
+            bmi: bmi,
+            smoking_status: smoking_status,
+            stroke: stroke,
+        })
+    );
 
     const xhttp = new XMLHttpRequest();
-    xhttp.open("PUT", "http://localhost:3000/slist/update/");
+    xhttp.open("PUT", "http://localhost:3000/brainstroke/update");
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.send(JSON.stringify({
-        "_id": id,
-        'StudentID': StudentID,
-        'Title': Title,
-        'Name': Name,
-        'Surname': Surname,
-        'Field': Field,
-        'Project': Project,
-        'Savings': Savings,
-        'GPA': GPA,
-        'Salary': Salary
-    }));
+    xhttp.send(
+        JSON.stringify({
+            _id: id,
+            gender: gender,
+            age: age,
+            hypertension: hypertension,
+            heart_disease: heart_disease,
+            ever_married: ever_married,
+            work_type: work_type,
+            Residence_type: Residence_type,
+            avg_glucose_level: avg_glucose_level,
+            bmi: bmi,
+            smoking_status: smoking_status,
+            stroke: stroke,
+        })
+    );
+
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const objects = JSON.parse(this.responseText);
             Swal.fire(
-                'Good job!',
-                'Update Compliant Successfully!',
-                'success'
-            )
+                "Good job!",
+                "Update Student Information Successfully!",
+                "success"
+            );
             loadTable();
         }
     };
