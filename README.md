@@ -5,7 +5,7 @@
 
 
 <ol><B>วิธีการใช้งาน</B>
-<li>ดาวน์โหลดโค้ดทั้งหมด
+<li>ดาวน์โหลดไฟล์ทั้งหมด
 <li>import slist.json ไปยัง mongoDB
 <li>connect mongodb server
 <li>เปิดไฟล์ใน vscode
