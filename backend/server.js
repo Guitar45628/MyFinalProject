@@ -41,6 +41,15 @@ app.get('/brainstroke', async (req, res) => {
     res.status(200).send(objects);
 })
 
+app.get('/brainstroke/count', async (req, res) => {
+    const client = new MongoClient(uri);
+    await client.connect();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    const totaldoc = await client.db('mydb').collection('brainstroke').estimatedDocumentCount();
+    await client.close();
+    res.status(200).send({totaldoc});
+})
+
 app.get('/brainstroke/range/:start-:end', async (req, res) => {
     const { params } = req;
     const start = parseInt(params.start)
@@ -68,7 +77,7 @@ app.get('/brainstroke/page/:start', async (req, res) => {
     const totaldoc = await client.db('mydb').collection('brainstroke').countDocuments();
     await client.db('mydb').collection('temp').deleteMany({});
     await client.db("mydb").collection("temp").insertOne({"temp":objects})
-    const result = await client.db('mydb').collection('temp').find({}).project({"temp":{$slice:[start,50]}}).toArray()
+    const result = await client.db('mydb').collection('temp').find({}).project({"temp":{$slice:[start,200]}}).toArray()
     const obj = result[0].temp
     res.status(200).send({
         "objects":obj,
