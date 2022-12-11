@@ -16,7 +16,7 @@
             integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
             crossorigin="anonymous" />
 
-        <title>Brian Stroke</title>
+        <title>Data | BrianStroke</title>
         <link href="index.css" rel="stylesheet">
         <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>
@@ -25,7 +25,7 @@
     <body>
         <div class="container">
             <div class="bd-highlight mb-3">
-                <nav class="navbar navbar-expand-lg bg-light">
+                <nav class="navbar navbar-expand-lg bg-light sticky-top">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="#"><b>BrainStroke</b></a>
                         <button class="navbar-toggler" type="button"
@@ -46,7 +46,8 @@
                                     <a class="nav-link" href="dashboard.html">Dashboard</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="table.html">Data</a>
+                                    <a class="nav-link active"
+                                        aria-current="page" href="table.html">Data</a>
                                 </li>
                             </ul>
                             <form class="d-flex" role="search">
@@ -63,27 +64,36 @@
             </div>
 
 
-            
+
 
             <div class="d-flex bd-highlight mb-3">
-                <div class="me-auto p-2 bd-highlight">
-                    <h2 id="HeadText">Brain Stroke Infomation</h2>
+                <div class="me-auto bd-highlight">
+                    <h2 id="HeadText"><b>Brain Stroke Infomation</b></h2>
+                    <h6 id="subheadTxt"></h6>
                 </div>
-                <div class="p-2 bd-highlight">
+                <div class="bd-highlight me-2" id="pagebox">
+                    <select class="form-select" aria-label=".form-select"
+                        id="page_select"
+                        onchange="loadPage();return false;">
+                        <option selected value="0">page 1</option>
+                    </select>
+                </div>
+                <div class="bd-highlight">
                     <button type="button" class="btn btn-secondary"
                         onclick="showStudentCreateBox()">Create</button>
                 </div>
-                <div class="p-2 bd-highlight">
-                    <select  class="form-select" aria-label=".form-select" id="page_select"
-                        onchange="loadPage();return false;"
-                        //onclick="loadPage();return false">
-                        <option selected value="0">page 1</option>
-                      </select>
-                  </div>
+
             </div>
-            <div class="table-responsive" >
-                <table class="table table-condensed table-striped table-hover">
-                    <thead>
+            <div class="table-responsive" id="tableArea"
+                style="height:500px;
+                background-color: white;
+                padding: 10px;
+                border-radius: 8px;
+                box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12);
+                margin-bottom: 20px;">
+                <table class="table-responsive-md table-condensed table-striped
+                    table-hover">
+                    <thead class="table-light">
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">gender</th>
@@ -101,7 +111,8 @@
                     </thead>
                     <tbody id="mytable">
                         <tr>
-                            <th scope="row" colspan="5">Loading...</th>
+                            <th scope="row" colspan="5"><div
+                                    class="spinner-border"></div></th>
                         </tr>
                     </tbody>
                 </table>

@@ -1,6 +1,6 @@
-loadPage()
+
 createPage()
-function loadTable() {
+function loadTable(pageCount) {
     
     const xhttp = new XMLHttpRequest();
     const uri = "http://localhost:3000/brainstroke";
@@ -35,9 +35,8 @@ function loadTable() {
                 num++;
             }
             document.getElementById("mytable").innerHTML = trHTML;
-            document.getElementById("HeadText").innerText = "Brain Stroke Infomation (จำนวน " + (num - 1) + " รายการ)"
+            document.getElementById("subheadTxt").innerText = "แสดงจำนวน "+(num-1)+" จากทั้งหมด "+ pageCount + " รายการ"
 
-            loadGraph(objects);
         }
     };
 }
@@ -58,11 +57,13 @@ function createPage() {
             }
             document.getElementById("page_select").innerHTML = optionHTML;
         }
+        loadPage(pageCount)
+        loadTable(pageCount)
     };
 }
 
 function loadPage() {
-    document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5">Loading...</th></tr>';
+    document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5"><div class="spinner-border"></div></th></tr>';
     var page_selected = parseInt(document.getElementById("page_select").value);
     //console.log(page_selected)
     const xhttp = new XMLHttpRequest();
@@ -76,6 +77,7 @@ function loadPage() {
             var num = 1;
 
             const objects = JSON.parse(this.responseText).objects;
+            const pageCount = JSON.parse(this.responseText).Counter;
             for (let object of objects) {
                 trHTML += "<tr>";
                 trHTML += "<td>" + num + "</td>";
@@ -98,13 +100,13 @@ function loadPage() {
                 num++;
             }
             document.getElementById("mytable").innerHTML = trHTML;
-            document.getElementById("HeadText").innerText = "Brain Stroke Infomation (จำนวน " + (num - 1) + " รายการ)"
+            document.getElementById("subheadTxt").innerText = "แสดงจำนวน "+(num-1)+" จากทั้งหมด "+ pageCount + " รายการ"
         }
     };
 }
 
 function loadQueryTable() {
-    document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5">Loading...</th></tr>';
+    document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5"<div class="spinner-border"></div></th></tr>';
     var searchText = document.getElementById("searchTextBox").value;
     if (searchText != "") {
         const xhttp = new XMLHttpRequest();
@@ -116,6 +118,8 @@ function loadQueryTable() {
                 var trHTML = "";
                 var num = 1;
                 const objects = JSON.parse(this.responseText).Complaint;
+                const pageCount = JSON.parse(this.responseText).Counter;
+                
                 for (let object of objects) {
                     trHTML += "<tr>";
                     trHTML += "<td>" + num + "</td>";
@@ -140,13 +144,26 @@ function loadQueryTable() {
                 }
                 console.log(trHTML);
                 document.getElementById("mytable").innerHTML = trHTML;
-                document.getElementById("HeadText").innerText = "Brain Stroke Infomation (จำนวน " + (num - 1) + " รายการ)"
-
-                loadGraph(objects);
+                document.getElementById("subheadTxt").innerText = "แสดงจำนวน "+(num-1)+" จากทั้งหมด "+ pageCount + " รายการ"
+                document.getElementById("pagebox").style.visibility = 'hidden';
+                //document.getElementById("resetbt").style.visibility = 'visible';
+                //document.getElementById("pagebox").remove()
+                console.log(num)
+                if (num=="1"){
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'No results found!',
+                        footer: '<a href="table.html">Reload data</a>'
+                      })
+                    document.getElementById("tableArea").style.visibility = 'hidden';  
+                }
             }
         };
     } else {
-        loadTable()
+        document.getElementById("pagebox").style.visibility = 'visible';
+        document.getElementById("tableArea").style.visibility = 'visible';
+        loadPage()
     }
 
 }
@@ -255,7 +272,7 @@ function slistCreate() {
                 "Create Student Information Successfully!",
                 "success"
             );
-            loadTable();
+            loadPage();
         }
     };
 }
@@ -300,7 +317,7 @@ function studentDelete(id) {
                 "Delete Student Information Successfully!",
                 "success"
             );
-            loadTable();
+            loadPage();
         }
     };
 }
@@ -421,7 +438,7 @@ function studentUpdate() {
                 "Update Student Information Successfully!",
                 "success"
             );
-            loadTable();
+            loadPage();
         }
     };
 }

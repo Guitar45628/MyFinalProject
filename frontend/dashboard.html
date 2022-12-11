@@ -68,58 +68,61 @@
             </div>
         </div>
 
-        <div style="background-color: white; padding: 10px; border-radius:15px;box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12);" class="container">
-            <div class="d-flex bd-highlight mb-3">
-                <div class="col">
-                    <div id="genderChart"></div>
+        <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner" >
+              <div class="carousel-item active" >
+                <div class="container" style="background-color: white; padding: 10px; border-radius:15px;box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12); margin-bottom: 30px;">
+                    <div class="d-flex bd-highlight mb-3">
+                        <div class="col">
+                            <div id="genderChart"></div>
+                        </div>
+                        <div class="col">
+                            <div id="glucoseChart"></div>
+                        </div>
+                        <div class="col">
+                            <div id="bmiChart"></div>
+                        </div>
+                        
+                    </div>
+                    <div class="d-flex bd-highlight mb-3">
+                        <div class="col">
+                            <div id="diseaseChart" style="width: 400px;"></div>
+                        </div>
+                        <div class="col">
+                            <div id="workChart"></div>
+                        </div>
+                        <div class="col">
+                            <div id="smokingChart" style="width: 400px;"></div>
+                        </div>
+                    </div>
                 </div>
+              </div>
+              <div class="carousel-item">
+                <div style="background-color: white; padding: 10px; border-radius:15px;box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12); margin-bottom: 30px;" class="container">
+                    <div class="d-flex bd-highlight mb-3">
+                        <div class="col">
+                            <div id="residenceChart"></div>
+                        </div>
 
-                <div class="col">
-                    <div id="marriageChart"></div>
+                        <div class="col">
+                            <div id="marriageChart"></div>
+                        </div>
+        
+                    </div>
                 </div>
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
 
-                <div class="col">
-                    <div id="smokingChart"></div>
-                </div>
-                
-            </div>
-            <div class="d-flex bd-highlight mb-3">
-                <div class="col">
-                    <div id="diseaseChart" style="width: 400px;"></div>
-                </div>
-                <div class="col">
-                    <div id="residenceChart"></div>
-                </div>
-                <div class="col">
-                    <div id="workChart" style="width: 400px;"></div>
-                </div>
-            </div>
-
-            </div class="table-responsive" hidden>
-                <table class="table table-condensed table-striped table-hover" hidden>
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">gender</th>
-                            <th scope="col">age</th>
-                            <th scope="col">hypertension</th>
-                            <th scope="col">heart_disease</th>
-                            <th scope="col">ever_married</th>
-                            <th scope="col">work_type</th>
-                            <th scope="col">Residence_type</th>
-                            <th scope="col">avg_glucose_level</th>
-                            <th scope="col">bmi</th>
-                            <th scope="col">smoking_status</th>
-                            <th scope="col">stroke</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mytable">
-                        <tr>
-                            <th scope="row" colspan="5">Loading...</th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+        
         </div>
 
         <script src="dashboard.js"></script>

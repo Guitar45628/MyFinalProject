@@ -12,8 +12,8 @@ function loadTable() {
         if (this.readyState == 4 && this.status == 200) {
             var trHTML = "";
             var num = 1;
+
             const objects = JSON.parse(this.responseText);
-            console.log(objects);
 
             for (let object of objects) {
                 trHTML += "<tr>";
@@ -37,6 +37,35 @@ function loadTable() {
                 num++;
             }
             document.getElementById("mytable").innerHTML = trHTML;
+            document.getElementById("HeadText").innerText = "Brain Stroke Infomation (จำนวน " + (num - 1) + " รายการ)"
+
+            loadGraph(objects);
+        }
+    };
+}
+
+function loadPage() {
+    document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5">Loading...</th></tr>';
+    var page_selected = document.getElementById("page_select").value;
+    console.log(page_selected)
+    const xhttp = new XMLHttpRequest();
+    const uri = "http://localhost:3000/brainstroke/page/" + page_selected;
+    xhttp.open("GET", uri);
+    xhttp.send();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var trHTML = "";
+            var num = 0;
+            const objects = JSON.parse(this.responseText);
+            for (let object of objects) {
+                console.log(object)
+                num++;
+            }
+            var page = 20
+            for (let i in page){
+                trHTML = "<option>"+""+i+"</option>"
+            }
+            console.log(i);
             document.getElementById("HeadText").innerText = "Brain Stroke Infomation (จำนวน " + (num - 1) + " รายการ)"
 
             loadGraph(objects);

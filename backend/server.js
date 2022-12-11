@@ -206,12 +206,14 @@ app.get('/brainstroke/search/:searchText', async (req, res) => {
     const searchText = params.searchText
     const client = new MongoClient(uri);
     await client.connect();
-    const objects = await client.db('mydb').collection('brainstroke').find({ $text: { $search: searchText } }).sort({ "Date received": -1 }).toArray();
+    const objects = await client.db('mydb').collection('brainstroke').find({ $text: { $search: searchText } }).toArray();
+    const totaldoc = await client.db('mydb').collection('brainstroke').countDocuments();
     await client.close();
     res.status(200).send({
         "status": "ok",
         "searchText": searchText,
-        "Complaint": objects
+        "Complaint": objects,
+        "Counter":totaldoc
     });
 })
 

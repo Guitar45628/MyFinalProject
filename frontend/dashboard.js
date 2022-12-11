@@ -57,6 +57,8 @@ function loadGraph(objects) {
     var [m_hypertensionCount, f_hypertensionCount, m_heartdiseaseCount, f_heartdiseaseCount, m_strokeCount, f_strokeCount] = [0, 0, 0, 0, 0, 0] //ประกาศตัวแปรเก็บจำนวนสำหรับ diseaseChart
     var [urbanCount, ruralCount] = [0, 0] //ประกาศตัวแปรเก็บจำนวนสำหรับ residenceChart
     var [privateCount, selfCount, govtCount, childrenworkCount] = [0, 0, 0, 0] //ประกาศตัวแปรเก็บจำนวนสำหรับ workChart
+    var [bmi1Count,bmi2Count,bmi3Count,bmi4Count,bmi5Count] = [0,0,0,0,0]
+    var [glu1Count,glu2Count,glu3Count] = [0,0,0]
 
     for (let object of objects) {
         switch (object["smoking_status"]) {
@@ -149,6 +151,27 @@ function loadGraph(objects) {
                 selfCount += 1
                 break
         }
+        if (object['bmi']<"18.50"){
+            bmi1Count += 1
+        }else if(object['bmi']<23){
+            bmi2Count += 1
+        }else if (object['bmi']<25){
+            bmi3Count += 1
+        }else if (object['bmi']<30){
+            bmi4Count += 1
+        }else{
+            bmi5Count += 1
+        }
+
+        if (object['avg_glucose_level']<70){
+            console.log("<70")
+        }else if (object['avg_glucose_level']<100){
+            glu1Count += 1
+        }else if (object['avg_glucose_level']<125){
+            glu2Count += 1
+        }else{
+            glu3Count += 1
+        }
     }
     var dataGender = google.visualization.arrayToDataTable([
         ["Project", "Field"],
@@ -185,7 +208,8 @@ function loadGraph(objects) {
         fontSize: 12,
         titleFontSize: 15,
         tooltipFontSize: 15,
-        is3D: true
+        is3D: true,
+        height: 400,
     };
     var marriageChart = new google.visualization.PieChart(
         document.getElementById("marriageChart")
@@ -195,7 +219,7 @@ function loadGraph(objects) {
     //กราฟ smoke
     var dataSmoking = google.visualization.arrayToDataTable([
         [
-            "Student Titile",
+            "Status",
             "Number",
             {
                 role: "style",
@@ -266,6 +290,7 @@ function loadGraph(objects) {
         fontSize: 12,
         titleFontSize: 15,
         tooltipFontSize: 15,
+        height: 400,
     };
 
     var residenceChart = new google.visualization.PieChart(document.getElementById('residenceChart'));
@@ -285,7 +310,6 @@ function loadGraph(objects) {
         titleFontSize: 20,
         legentFontSize: 15,
         fontSize: 12,
-        titleFontSize: 15,
         tooltipFontSize: 15,
         slices: {
             1: { offset: 0.1 },
@@ -298,4 +322,56 @@ function loadGraph(objects) {
     var workChart = new google.visualization.PieChart(document.getElementById('workChart'));
     workChart.draw(dataWork, optionsWork);
 
+    //กราฟ BMI
+    var dataBMI = google.visualization.arrayToDataTable([
+        ["เกณฑ์", "จำนวน", { role: "style" },{role: "annotation"}, ],
+        ["ผอม", bmi1Count, "#b87333","<18.50"],
+        ["ปกติ", bmi2Count, "silver","18.50-22.99"],
+        ["ท้วม", bmi3Count, "gold","23.00-24.99"],
+        ["อ้วน", bmi4Count, "salmon","25.00-29.99"],
+        ["อ้วนมาก", bmi5Count, "color: #e5e4e2",">30.00"]
+      ]);
+
+      var viewBMI = new google.visualization.DataView(dataBMI);
+      viewBMI.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+
+      var optionsBMI = {
+        title: "BMI",
+        legentFontSize: 15,
+        fontSize: 15,
+        titleFontSize: 15,
+        tooltipFontSize: 15,
+        bar: {groupWidth: "65%"},
+        legend: { position: "none" },
+      };
+      var chartBMI = new google.visualization.ColumnChart(document.getElementById("bmiChart"));
+      chartBMI.draw(viewBMI, optionsBMI);
+    
+      //กราฟ glucoseChart
+      var dataGlucose = google.visualization.arrayToDataTable([
+        ['Criteria', 'Count'],
+        ['Normal', glu1Count],
+        ['At risk', glu2Count],
+        ['High risk', glu3Count]
+      ]);
+
+      var optionsGlucose = {
+        title: 'Glucose Level',
+        titleFontSize: 20,
+        legentFontSize: 15,
+        fontSize: 12,
+        titleFontSize: 15,
+        tooltipFontSize: 15,
+        is3D: true,
+        
+      };
+
+      var chartGlucose = new google.visualization.PieChart(document.getElementById('glucoseChart'));
+
+      chartGlucose.draw(dataGlucose, optionsGlucose);
 }
