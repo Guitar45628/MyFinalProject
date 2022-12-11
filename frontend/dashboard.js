@@ -282,7 +282,6 @@ function loadGraph(objects) {
 
     var optionsWork = {
         title: 'Work Type',
-        pieSliceText: 'label',
         titleFontSize: 20,
         legentFontSize: 15,
         fontSize: 12,
