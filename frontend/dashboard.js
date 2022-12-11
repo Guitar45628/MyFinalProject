@@ -164,7 +164,7 @@ function loadGraph(objects) {
         }
 
         if (object['avg_glucose_level']<70){
-            console.log("<70")
+            
         }else if (object['avg_glucose_level']<100){
             glu1Count += 1
         }else if (object['avg_glucose_level']<125){

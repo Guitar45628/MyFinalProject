@@ -190,17 +190,6 @@ app.delete('/brainstroke/delete', async (req, res) => {
     });
 })
 
-app.get('/brainstroke/clean', async (req, res) => {
-    const client = new MongoClient(uri);
-    await client.connect();
-    const counter = client.db('mydb').collection('brainstorke').estimatedDocumentCount()
-    await client.db('mydb').collection('brainstroke').deleteMany({})
-    await client.close();
-    res.status(200).send({
-        "status": "ok",
-    });
-})
-
 app.get('/brainstroke/search/:searchText', async (req, res) => {
     const { params } = req;
     const searchText = params.searchText
@@ -229,3 +218,44 @@ app.get('/brainstroke/:id', async (req, res) => {
         "Complaint": object
     });
 })
+
+/*---Experiment---*/
+
+//Clean all data in brainstroke collection
+app.delete('/experiment/clean', async (req, res) => {
+    const client = new MongoClient(uri);
+    await client.connect();
+    await client.db('mydb').collection('brainstroke').deleteMany({})
+    await client.close();
+    res.status(200).send({
+        "status": "ok",
+    });
+})
+
+//Restore all data from backup to brainstroke
+app.get('/experiment/restore', async (req, res) => {
+    const client = new MongoClient(uri);
+    await client.connect();
+    const dataSource = await client.db('mydb').collection('backup').find({}).toArray();
+    await client.db('mydb').collection('brainstroke').deleteMany({})
+    await client.db('mydb').collection('brainstroke').insertMany(dataSource)
+    await client.close();
+    res.status(200).send(dataSource);
+})
+
+//Duplicate data
+app.get('/experiment/duplicate/:round', async (req, res) => {
+    const { params } = req;
+    const round = parseInt(params.round)
+    const client = new MongoClient(uri);
+    await client.connect();
+    for (let i=1; i<= round;i++){
+        console.log(i)
+        const dataSource = await client.db('mydb').collection('brainstroke').find({}).project({"_id":0}).toArray();
+        //await client.db('mydb').collection('brainstroke').deleteMany({})
+        await client.db('mydb').collection('brainstroke').insertMany(dataSource)
+    }
+    await client.close();
+    res.status(200).send();
+})
+/*---THE END---*/

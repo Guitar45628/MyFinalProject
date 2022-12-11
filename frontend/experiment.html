@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
@@ -16,14 +15,14 @@
             integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
             crossorigin="anonymous" />
 
-        <title>Home | BrianStroke</title>
+        <title>Experiment | BrainStroke</title>
         <link href="index.css" rel="stylesheet">
         <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>
     </head>
-
     <body>
         <div class="container">
+            <!--Navbar-->
             <div class="bd-highlight mb-3">
                 <nav class="navbar navbar-expand-lg bg-light">
                     <div class="container-fluid">
@@ -40,7 +39,7 @@
                                 navbar-nav-scroll" style="--bs-scroll-height:
                                 100px;">
                                 <li class="nav-item">
-                                    <a class="nav-link active"
+                                    <a class="nav-link"
                                         aria-current="page" href="index.html">Home</a>
                                 </li>
                                 <li class="nav-item">
@@ -50,76 +49,64 @@
                                     <a class="nav-link" href="table.html">Data</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="experiment.html">Experiment</a>
+                                    <a class="nav-link active"
+                                        href="experiment.html">Experiment</a>
                                 </li>
                             </ul>
-                            <form class="d-flex" role="search">
-                                <input class="form-control me-2"
-                                    id="searchTextBox"
-                                    type="search" placeholder="Search"
-                                    aria-label="Search">
-                                <button class="btn btn-outline-success"
-                                    onclick="loadQueryTable();return false;">Search</button>
-                            </form>
                         </div>
                     </div>
                 </nav>
             </div>
+            <div class="alert alert-danger" role="alert">
+                ตัวเลือกทั้งหมดนี้อยู่ในขั้นทดลอง อาจจะส่งผลต่อฐานข้อมูลและประสิทธิภาพได้ ควรใช้ด้วยความระมัดระวัง
+              </div>
 
-
-            <div class="d-flex bd-highlight mb-3">
-
-                <div class="col">
-                    <div id="piechartTimelyResponse"></div>
+            <!--Grid-->
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><b>Delete All Data</b></h5>
+                            <p class="card-text">ลบข้อมูลทั้งหมดที่มีในฐานข้อมูล
+                                mydb.brainstroke</p>
+                            <button onclick="delete_all_data_fn()" class="btn
+                                btn-danger">DELETE</button>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col">
-                    <div id="barchartSubmitted"></div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><b>Restore all data</b></h5>
+                            <p class="card-text">คืนค่าข้อมูลทั้งหมดจากฐานข้อมูลต้นฉบับ
+                                โดยลบข้อมูลที่มีอยู่เดิมทั้งหมด</p>
+                            <button onclick="restore_all_data_fn()" class="btn
+                                btn-primary">Restore</button>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col">
-                    <div id="testchart"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><b>Duplicate data</b></h5>
+                            <p class="card-text">คัดลอกข้อมูลเดิมและเพิ่มไปยังฐานข้อมูลเดิม</p>
+                            <div class="mb-2">
+                                <label for="formCount" class="form-label">จำนวนครั้งที่ต้องการเพิ่ม</label>
+                                <input type="number" value="1" class="form-control" id="formCount" placeholder="จำนวนครั้ง">
+                              </div>
+                            <button onclick="duplicate_data_fn()" class="btn 
+                                btn-secondary" >DELETE</button>
+                        </div>
+                    </div>
                 </div>
-
             </div>
 
-            <div class="d-flex bd-highlight mb-3">
-                <div class="me-auto p-2 bd-highlight">
-                    <h2 id="HeadText">Brain Stroke Infomation</h2>
-                </div>
-                <div class="p-2 bd-highlight">
-                    <button type="button" class="btn btn-secondary"
-                        onclick="showStudentCreateBox()">Create</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-condensed table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">gender</th>
-                            <th scope="col">age</th>
-                            <th scope="col">hypertension</th>
-                            <th scope="col">heart_disease</th>
-                            <th scope="col">ever_married</th>
-                            <th scope="col">work_type</th>
-                            <th scope="col">Residence_type</th>
-                            <th scope="col">avg_glucose_level</th>
-                            <th scope="col">bmi</th>
-                            <th scope="col">smoking_status</th>
-                            <th scope="col">stroke</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mytable">
-                        <tr>
-                            <th scope="row" colspan="5">Loading...</th>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+
         </div>
 
-        <script src="index.js"></script>
+        <script src="experiment.js"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
         <script

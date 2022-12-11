@@ -173,7 +173,7 @@ function showStudentCreateBox() {
     const date = d.toISOString().split("T")[0];
 
     Swal.fire({
-        title: "Create Student Transaction",
+        title: "Create",
         html:
 
             '<div class="mb-3"><label for="gender" class="form-label">Gender</label>' +
@@ -269,7 +269,7 @@ function slistCreate() {
             const objects = JSON.parse(this.responseText);
             Swal.fire(
                 "Good job!",
-                "Create Student Information Successfully!",
+                "Create Information Successfully!",
                 "success"
             );
             loadPage();
@@ -314,7 +314,7 @@ function studentDelete(id) {
             const objects = JSON.parse(this.responseText);
             Swal.fire(
                 "Good job!",
-                "Delete Student Information Successfully!",
+                "Delete Information Successfully!",
                 "success"
             );
             loadPage();
@@ -332,7 +332,7 @@ function showStudentUpdateBox(id) {
             const object = JSON.parse(this.responseText).Complaint;
             console.log("showStudentUpdateBox", object);
             Swal.fire({
-                title: "Update Student Transaction",
+                title: "Update",
                 html:
                     '<div class="mb-3"><label for="id" class="form-label">id</label>' +
                     '<input class="form-control" id="id" placeholder="id" value="' + object["_id"] + '" readonly></div>' +
@@ -435,7 +435,7 @@ function studentUpdate() {
             const objects = JSON.parse(this.responseText);
             Swal.fire(
                 "Good job!",
-                "Update Student Information Successfully!",
+                "Update Information Successfully!",
                 "success"
             );
             loadPage();
