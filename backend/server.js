@@ -18,25 +18,22 @@ app.listen(port, () => {
 const { MongoClient, ObjectId } = require('mongodb');
 const uri = 'mongodb://127.0.0.1:27017';
 
-// const connectDB = async() => {
-//     try {
-//         const client = new MongoClient(uri);
-//         await client.connect();
-//         console.log('MongoDB is now conneted.')
-
-//     } catch (error) {
-//         console.log(error);
-//         process.exit(1);
-//     }
-// }
-
-// connectDB();
-
 app.get('/brainstroke', async (req, res) => {
     const client = new MongoClient(uri);
     await client.connect();
     // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    await client.db('mydb').collection('temp').deleteMany({});
+    console.log("main path deleted")
     const objects = await client.db('mydb').collection('brainstroke').find({}).limit(20).toArray();
+    await client.close();
+    res.status(200).send(objects);
+})
+
+app.get('/temp', async (req, res) => {
+    const client = new MongoClient(uri);
+    await client.connect();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    const objects = await client.db('mydb').collection('temp').find({}).toArray();
     await client.close();
     res.status(200).send(objects);
 })
@@ -78,6 +75,7 @@ app.get('/brainstroke/page/:start', async (req, res) => {
     await client.db('mydb').collection('temp').deleteMany({});
     await client.db("mydb").collection("temp").insertOne({"temp":objects})
     const result = await client.db('mydb').collection('temp').find({}).project({"temp":{$slice:[start,200]}}).toArray()
+    console.log("From here!")
     const obj = result[0].temp
     res.status(200).send({
         "objects":obj,
@@ -190,6 +188,16 @@ app.delete('/brainstroke/delete', async (req, res) => {
     });
 })
 
+app.delete('/temp/delete', async (req, res) => {
+    const client = new MongoClient(uri);
+    await client.connect();
+    await client.db('mydb').collection('temp').deleteMany({});
+    await client.close();
+    res.status(200).send({
+        "status": "ok"
+    });
+})
+
 app.get('/brainstroke/search/:searchText', async (req, res) => {
     const { params } = req;
     const searchText = params.searchText
@@ -226,6 +234,7 @@ app.delete('/experiment/clean', async (req, res) => {
     const client = new MongoClient(uri);
     await client.connect();
     await client.db('mydb').collection('brainstroke').deleteMany({})
+    await client.db('mydb').collection('temp').deleteMany({})
     await client.close();
     res.status(200).send({
         "status": "ok",

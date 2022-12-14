@@ -1,4 +1,3 @@
-
 createPage()
 function loadTable(pageCount) {
     
@@ -43,8 +42,13 @@ function loadTable(pageCount) {
 
 function createPage() {
     const xhttp = new XMLHttpRequest();
+    const xhttp2 = new XMLHttpRequest();
     const uri = "http://localhost:3000/brainstroke/count";
+    const uri2 = "http://localhost:3000/temp/deletet";
     xhttp.open("GET", uri);
+    xhttp2.open("DELETE", uri2);
+    xhttp2.send();
+    console.log("temp deleted")
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -58,6 +62,7 @@ function createPage() {
             document.getElementById("page_select").innerHTML = optionHTML;
         }
         loadPage(pageCount)
+    
         loadTable(pageCount)
     };
 }
