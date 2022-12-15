@@ -257,7 +257,7 @@ function slistCreate() {
               })
               Toast.fire({
                 icon: 'success',
-                title: 'Create Infomation successfully!'
+                title: 'Create successfully!'
               })
             loadPage();
         }
@@ -312,7 +312,7 @@ function studentDelete(id) {
               })
               Toast.fire({
                 icon: 'success',
-                title: 'Delete Information Successfully.'
+                title: 'Delete Successfully.'
               })
             loadPage();
         }
@@ -443,7 +443,7 @@ function studentUpdate() {
               })
               Toast.fire({
                 icon: 'success',
-                title: 'Update Information Successfully.'
+                title: 'Update Successfully.'
               })
             loadPage();
         }
