@@ -1,88 +1,38 @@
 createPage()
-function loadTable(pageCount) {
-    
-    const xhttp = new XMLHttpRequest();
-    const uri = "http://localhost:3000/brainstroke";
-    xhttp.open("GET", uri);
-    xhttp.send();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var trHTML = "";
-            var num = 1;
-
-            const objects = JSON.parse(this.responseText);
-
-            for (let object of objects) {
-                trHTML += "<tr>";
-                trHTML += "<td>" + num + "</td>";
-                trHTML += "<td>" + object["gender"] + "</td>";
-                trHTML += "<td>" + object["age"] + "</td>";
-                trHTML += "<td>" + object["hypertension"] + "</td>";
-                trHTML += "<td>" + object["heart_disease"] + "</td>";
-                trHTML += "<td>" + object["ever_married"] + "</td>";
-                trHTML += "<td>" + object["work_type"] + "</td>";
-                trHTML += "<td>" + object["Residence_type"] + "</td>";
-                trHTML += "<td>" + object["avg_glucose_level"] + "</td>";
-                trHTML += "<td>" + object["bmi"] + "</td>";
-                trHTML += "<td>" + object["smoking_status"] + "</td>";
-                trHTML += "<td>" + object["stroke"] + "</td>";
-                trHTML += "<td>";
-                trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showStudentUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
-                trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showStudentDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
-                trHTML += "<tr>";
-
-                num++;
-            }
-            document.getElementById("mytable").innerHTML = trHTML;
-            document.getElementById("subheadTxt").innerText = "แสดงจำนวน "+(num-1)+" จากทั้งหมด "+ pageCount + " รายการ"
-
-        }
-    };
-}
 
 function createPage() {
     const xhttp = new XMLHttpRequest();
-    const xhttp2 = new XMLHttpRequest();
-    const uri = "http://localhost:3000/brainstroke/count";
-    const uri2 = "http://localhost:3000/temp/deletet";
+    const uri = "http://localhost:3000/brainstroke/createpage";
     xhttp.open("GET", uri);
-    xhttp2.open("DELETE", uri2);
-    xhttp2.send();
-    console.log("temp deleted")
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-            var pageCount = JSON.parse(this.responseText).totaldoc;
-            console.log(pageCount)
-            var optionHTML =''
-            var page = pageCount/200
-            for (let i=0; i<=page; i++){
-                optionHTML += "<option value=" + (i*200) +">"+"Page "+(i+1)+"</option>"
+            var pageCount = JSON.parse(this.responseText).results;
+            var optionHTML = ''
+            var page = pageCount / 250
+            for (let i = 0; i <= page; i++) {
+                optionHTML += "<option value=" + (i) + ">" + "Page " + (i + 1) + "</option>"
             }
             document.getElementById("page_select").innerHTML = optionHTML;
         }
-        loadPage(pageCount)
-    
-        loadTable(pageCount)
+        loadPage()
     };
 }
 
 function loadPage() {
-    document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5"><div class="spinner-border"></div></th></tr>';
     var page_selected = parseInt(document.getElementById("page_select").value);
-    //console.log(page_selected)
     const xhttp = new XMLHttpRequest();
-    const uri = "http://localhost:3000/brainstroke/page/" + (page_selected);
+    const uri = "http://localhost:3000/brainstroke/p/" + (page_selected);
     console.log(uri)
     xhttp.open("GET", uri);
     xhttp.send();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var trHTML = "";
+            var subText = ""
             var num = 1;
-
             const objects = JSON.parse(this.responseText).objects;
-            const pageCount = JSON.parse(this.responseText).Counter;
+            const documentCount = JSON.parse(this.responseText).documentCount;
             for (let object of objects) {
                 trHTML += "<tr>";
                 trHTML += "<td>" + num + "</td>";
@@ -104,8 +54,15 @@ function loadPage() {
 
                 num++;
             }
-            document.getElementById("mytable").innerHTML = trHTML;
-            document.getElementById("subheadTxt").innerText = "แสดงจำนวน "+(num-1)+" จากทั้งหมด "+ pageCount + " รายการ"
+            console.log(num)
+            if (num == "1") {
+                subText += 'ไม่พบข้อมูล'
+                document.getElementById("subheadTxt").innerText = subText
+                document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5"><div class="spinner-border"></div></th></tr>';
+            } else {
+                document.getElementById("mytable").innerHTML = trHTML;
+                document.getElementById("subheadTxt").innerText = "แสดงจำนวน " + (num - 1) + " จากทั้งหมด " + documentCount + " รายการ"
+            }
         }
     };
 }
@@ -124,7 +81,7 @@ function loadQueryTable() {
                 var num = 1;
                 const objects = JSON.parse(this.responseText).Complaint;
                 const pageCount = JSON.parse(this.responseText).Counter;
-                
+
                 for (let object of objects) {
                     trHTML += "<tr>";
                     trHTML += "<td>" + num + "</td>";
@@ -149,19 +106,34 @@ function loadQueryTable() {
                 }
                 console.log(trHTML);
                 document.getElementById("mytable").innerHTML = trHTML;
-                document.getElementById("subheadTxt").innerText = "แสดงจำนวน "+(num-1)+" จากทั้งหมด "+ pageCount + " รายการ"
+                document.getElementById("subheadTxt").innerText = "แสดงจำนวน " + (num - 1) + " จากทั้งหมด " + pageCount + " รายการ"
                 document.getElementById("pagebox").style.visibility = 'hidden';
                 //document.getElementById("resetbt").style.visibility = 'visible';
                 //document.getElementById("pagebox").remove()
-                console.log(num)
-                if (num=="1"){
+                if (num == "1") {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
                         text: 'No results found!',
                         footer: '<a href="table.html">Reload data</a>'
+                    })
+                    document.getElementById("tableArea").style.visibility = 'hidden';
+                }else{
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                          toast.addEventListener('mouseenter', Swal.stopTimer)
+                          toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
                       })
-                    document.getElementById("tableArea").style.visibility = 'hidden';  
+                      Toast.fire({
+                        icon: 'success',
+                        title: 'พบ '+ searchText + ' จำนวน ' + (num-1) + ' รายการ'
+                      })
                 }
             }
         };
@@ -272,11 +244,21 @@ function slistCreate() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const objects = JSON.parse(this.responseText);
-            Swal.fire(
-                "Good job!",
-                "Create Information Successfully!",
-                "success"
-            );
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              Toast.fire({
+                icon: 'success',
+                title: 'Create Infomation successfully!'
+              })
             loadPage();
         }
     };
@@ -317,11 +299,21 @@ function studentDelete(id) {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
             const objects = JSON.parse(this.responseText);
-            Swal.fire(
-                "Good job!",
-                "Delete Information Successfully!",
-                "success"
-            );
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              Toast.fire({
+                icon: 'success',
+                title: 'Delete Information Successfully.'
+              })
             loadPage();
         }
     };
@@ -438,11 +430,21 @@ function studentUpdate() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const objects = JSON.parse(this.responseText);
-            Swal.fire(
-                "Good job!",
-                "Update Information Successfully!",
-                "success"
-            );
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+              Toast.fire({
+                icon: 'success',
+                title: 'Update Information Successfully.'
+              })
             loadPage();
         }
     };

@@ -59,6 +59,7 @@ function loadGraph(objects) {
     var [privateCount, selfCount, govtCount, childrenworkCount] = [0, 0, 0, 0] //ประกาศตัวแปรเก็บจำนวนสำหรับ workChart
     var [bmi1Count,bmi2Count,bmi3Count,bmi4Count,bmi5Count] = [0,0,0,0,0]
     var [glu1Count,glu2Count,glu3Count] = [0,0,0]
+    var [age1,age2,age3,age4,age5,age6] = [0,0,0,0,0,0]
 
     for (let object of objects) {
         switch (object["smoking_status"]) {
@@ -172,6 +173,21 @@ function loadGraph(objects) {
         }else{
             glu3Count += 1
         }
+
+        let age = object['age']
+        if (age < 18) {
+            age1 += 1
+          } else if (age >= 18 && age < 35) {
+            age2 += 1
+          } else if (age >= 35 && age < 50) {
+            age3 += 1
+          } else if (age >= 50 && age < 65) {
+            age4 += 1
+          } else if (age >= 65 && age < 82) {
+            age5 += 1
+          } else {
+            age6 += 1
+          }
     }
     var dataGender = google.visualization.arrayToDataTable([
         ["Project", "Field"],
@@ -209,7 +225,6 @@ function loadGraph(objects) {
         titleFontSize: 15,
         tooltipFontSize: 15,
         is3D: true,
-        height: 400,
     };
     var marriageChart = new google.visualization.PieChart(
         document.getElementById("marriageChart")
@@ -290,7 +305,6 @@ function loadGraph(objects) {
         fontSize: 12,
         titleFontSize: 15,
         tooltipFontSize: 15,
-        height: 400,
     };
 
     var residenceChart = new google.visualization.PieChart(document.getElementById('residenceChart'));
@@ -374,4 +388,26 @@ function loadGraph(objects) {
       var chartGlucose = new google.visualization.PieChart(document.getElementById('glucoseChart'));
 
       chartGlucose.draw(dataGlucose, optionsGlucose);
+
+      //กราฟอายุ
+
+      var dataAge = google.visualization.arrayToDataTable([
+        ['Age', 'Density', { role: 'style' }, { role: 'annotation' } ],
+        ['Minor', age1, '#FF6666', 'Minor' ],
+        ['Young Adult', age2, '#b87333', 'Young Adult' ],
+        ['Middle-Aged', age3, '#CCFF33', 'Middle-Aged' ],
+        ['Senior', age4, 'gold', 'Senior' ],
+        ['Elderly', age5, 'color: #e5e4e2', 'Elderly' ],
+        ['Very Elderly', age6, 'color: #CCCCFF', 'Very Elderly' ]
+     ]);
+     var optionsAge = {
+        title: "Age",
+        bar: {groupWidth: "95%"},
+        legend: { position: "none" },
+        fontSize: 12,
+        titleFontSize: 15,
+        tooltipFontSize: 15,
+      };
+      var chartAge = new google.visualization.BarChart(document.getElementById("ageChart"));
+      chartAge.draw(dataAge, optionsAge);
 }

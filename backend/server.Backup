@@ -2,52 +2,92 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const port = 3000
-const { MongoClient, ObjectId } = require('mongodb');
-const uri = 'mongodb://127.0.0.1:27017';
-const client = new MongoClient(uri);
+
 app.use(cors())
 app.use(express.json());
-
-app.listen(port, () => {
-    console.log(`App is running on http://localhost:${port}`)
-})
 
 app.get('/', (req, res) => {
     // res.send('Hello Welcome to brainstroke system')
     res.redirect('/brainstroke');
 })
 
+app.listen(port, () => {
+    console.log(`App is running on http://localhost:${port}`)
+})
+
+const { MongoClient, ObjectId } = require('mongodb');
+const uri = 'mongodb://127.0.0.1:27017';
+
 app.get('/brainstroke', async (req, res) => {
+    const client = new MongoClient(uri);
     await client.connect();
-    const objects = await client.db('mydb').collection('brainstroke').find({}).limit(200).toArray();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    await client.db('mydb').collection('temp').deleteMany({});
+    console.log("main path deleted")
+    const objects = await client.db('mydb').collection('brainstroke').find({}).limit(20).toArray();
     await client.close();
     res.status(200).send(objects);
 })
 
-//นับจำนวนเอกสารเพื่อสร้างจำนวนหน้า
-app.get('/brainstroke/createpage', async (req, res) => {
+app.get('/temp', async (req, res) => {
+    const client = new MongoClient(uri);
     await client.connect();
-    const results = await client.db('mydb').collection('brainstroke').estimatedDocumentCount();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    const objects = await client.db('mydb').collection('temp').find({}).toArray();
     await client.close();
-    res.status(200).send({results});
+    res.status(200).send(objects);
 })
 
-app.get('/brainstroke/p/:page', async (req, res) => {
-    const { params } = req;
-    let page = parseInt(params.page)
-    page = page*250
+app.get('/brainstroke/count', async (req, res) => {
+    const client = new MongoClient(uri);
     await client.connect();
-    const results = await client.db('mydb').collection('brainstroke').estimatedDocumentCount();
-    const objects = await client.db('mydb').collection('brainstroke').find({}).skip(page).limit(250).toArray();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    const totaldoc = await client.db('mydb').collection('brainstroke').estimatedDocumentCount();
     await client.close();
-    res.status(200).send({
-        "objects":objects,
-        "documentCount": results});
+    res.status(200).send({totaldoc});
 })
+
+app.get('/brainstroke/range/:start-:end', async (req, res) => {
+    const { params } = req;
+    const start = parseInt(params.start)
+    const temp_end = parseInt(params.end)
+    const end = temp_end - start
+    const client = new MongoClient(uri);
+    await client.connect();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    const objects = await client.db('mydb').collection('brainstroke').find({}).toArray();
+    await client.db('mydb').collection('temp').deleteMany({});
+    await client.db("mydb").collection("temp").insertOne({"temp":objects})
+    const result = await client.db('mydb').collection('temp').find({}).project({"temp":1,"temp":{$slice:[start,end]}}).toArray()
+    await client.close();
+    console.log(result)
+    res.status(200).send(result);
+})
+
+app.get('/brainstroke/page/:start', async (req, res) => {
+    const { params } = req;
+    const start = parseInt(params.start)
+    const client = new MongoClient(uri);
+    await client.connect();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
+    const objects = await client.db('mydb').collection('brainstroke').find({}).toArray();
+    const totaldoc = await client.db('mydb').collection('brainstroke').countDocuments();
+    await client.db('mydb').collection('temp').deleteMany({});
+    await client.db("mydb").collection("temp").insertOne({"temp":objects})
+    const result = await client.db('mydb').collection('temp').find({}).project({"temp":{$slice:[start,200]}}).toArray()
+    console.log("From here!")
+    const obj = result[0].temp
+    res.status(200).send({
+        "objects":obj,
+        "Counter":totaldoc
+    });
+})
+
 
 app.get('/brainstroke/gender', async (req, res) => {
     const client = new MongoClient(uri);
     await client.connect();
+    // const objects = await client.db('mydb').collection('s_collection').find({}).sort({"GPA": -1}).limit(10).project({_id:0}).toArray();
     const objects = await client.db('mydb').collection('brainstroke').find({}).toArray();
     await client.close();
     res.status(200).send({
@@ -58,6 +98,7 @@ app.get('/brainstroke/gender', async (req, res) => {
 app.get('/brainstroke/gender/:genderText', async (req, res) => {
     const { params } = req;
     const genderText = params.genderText
+    //console.log(genderText)
     const client = new MongoClient(uri);
     await client.connect();
     if (genderText == "") {
@@ -147,6 +188,16 @@ app.delete('/brainstroke/delete', async (req, res) => {
     });
 })
 
+app.delete('/temp/delete', async (req, res) => {
+    const client = new MongoClient(uri);
+    await client.connect();
+    await client.db('mydb').collection('temp').deleteMany({});
+    await client.close();
+    res.status(200).send({
+        "status": "ok"
+    });
+})
+
 app.get('/brainstroke/search/:searchText', async (req, res) => {
     const { params } = req;
     const searchText = params.searchText
@@ -183,6 +234,7 @@ app.delete('/experiment/clean', async (req, res) => {
     const client = new MongoClient(uri);
     await client.connect();
     await client.db('mydb').collection('brainstroke').deleteMany({})
+    await client.db('mydb').collection('temp').deleteMany({})
     await client.close();
     res.status(200).send({
         "status": "ok",
