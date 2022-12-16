@@ -121,7 +121,7 @@ function loadQueryTable() {
                 }else{
                     const Toast = Swal.mixin({
                         toast: true,
-                        position: 'top',
+                        position: 'bottom',
                         showConfirmButton: false,
                         timer: 3000,
                         timerProgressBar: true,
@@ -246,7 +246,7 @@ function slistCreate() {
             const objects = JSON.parse(this.responseText);
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'top',
+                position: 'bottom',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
@@ -301,7 +301,7 @@ function studentDelete(id) {
             const objects = JSON.parse(this.responseText);
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'top',
+                position: 'bottom',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
@@ -432,7 +432,7 @@ function studentUpdate() {
             const objects = JSON.parse(this.responseText);
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'top',
+                position: 'bottom',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,

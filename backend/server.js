@@ -32,6 +32,7 @@ app.get('/brainstroke/createpage', async (req, res) => {
     res.status(200).send({results});
 })
 
+//ใช้เพื่อดึงข้อมูลมาแสดงในหน้านั้นๆ
 app.get('/brainstroke/p/:page', async (req, res) => {
     const { params } = req;
     let page = parseInt(params.page)
@@ -45,6 +46,7 @@ app.get('/brainstroke/p/:page', async (req, res) => {
         "documentCount": results});
 })
 
+//ใช้สำหรับ
 app.get('/brainstroke/gender', async (req, res) => {
     const client = new MongoClient(uri);
     await client.connect();
