@@ -1,6 +1,6 @@
 google.charts.load("current", {
-    packages: ["corechart", "bar"],
-});
+    packages: ["corechart", "bar"],}
+);
 google.charts.setOnLoadCallback(loadTable);
 
 function loadTable() {
@@ -203,6 +203,8 @@ function loadGraph(objects) {
         titleFontSize: 15,
         tooltipFontSize: 15,
         is3D: true,
+        colors:["#6E85B7","#FF9494"],
+        //backgroundColor: "pink",
     };
     var genderChart = new google.visualization.PieChart(
         document.getElementById("genderChart")

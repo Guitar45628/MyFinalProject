@@ -20,12 +20,19 @@
         <link href="index.css" rel="stylesheet">
         <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>
+        <style>
+                body.swal2-shown > [aria-hidden="true"] {
+                                    transition: 0.2s filter;
+                                        filter: blur(2px);
+}
+            </style>
     </head>
 
     <body>
         <div class="container">
             <div class="bd-highlight mb-3">
-                <nav class="navbar navbar-expand-lg bg-light sticky-top" id="navbar">
+                <nav class="navbar navbar-expand-lg bg-light sticky-top"
+                    id="navbar">
                     <div class="container-fluid">
                         <a class="navbar-brand" href="#"><b>BrainStroke</b></a>
                         <button class="navbar-toggler" type="button"
@@ -78,7 +85,7 @@
                     <select class="form-select" aria-label=".form-select"
                         id="page_select"
                         onchange="loadPage();return false;">
-                        <option selected value="0">page 1</option>
+                        <option selected value="0">Page 1</option>
                     </select>
                 </div>
                 <div class="bd-highlight">
@@ -94,7 +101,8 @@
                 border-radius: 8px;
                 box-shadow: 0 12px 34px rgba(0, 0, 0, 0.12);
                 margin-bottom: 20px;">
-                <table class="table-responsive table-condensed table-striped table-hover ">
+                <table class="table table-responsive table-sm table-bordered
+                    table-condensed table-hover ">
                     <thead class="table-light">
                         <tr>
                             <th scope="col">#</th>

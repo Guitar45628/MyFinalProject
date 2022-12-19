@@ -34,7 +34,7 @@ function loadPage() {
             const objects = JSON.parse(this.responseText).objects;
             const documentCount = JSON.parse(this.responseText).documentCount;
             for (let object of objects) {
-                trHTML += "<tr>";
+                trHTML += "<tr onclick='showData(\"" + object["_id"] + "\")'>";
                 trHTML += "<td>" + num + "</td>";
                 trHTML += "<td>" + object["gender"] + "</td>";
                 trHTML += "<td>" + object["age"] + "</td>";
@@ -47,9 +47,9 @@ function loadPage() {
                 trHTML += "<td>" + object["bmi"] + "</td>";
                 trHTML += "<td>" + object["smoking_status"] + "</td>";
                 trHTML += "<td>" + object["stroke"] + "</td>";
-                trHTML += "<td>";
-                trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showStudentUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
-                trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showStudentDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
+                // trHTML += "<td>";
+                // trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
+                // trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
                 trHTML += "<tr>";
 
                 num++;
@@ -83,7 +83,7 @@ function loadQueryTable() {
                 const pageCount = JSON.parse(this.responseText).Counter;
 
                 for (let object of objects) {
-                    trHTML += "<tr>";
+                    trHTML += "<tr onclick='showData(\"" + object["_id"] + "\")'>";
                     trHTML += "<td>" + num + "</td>";
                     trHTML += "<td>" + object["gender"] + "</td>";
                     trHTML += "<td>" + object["age"] + "</td>";
@@ -96,18 +96,15 @@ function loadQueryTable() {
                     trHTML += "<td>" + object["bmi"] + "</td>";
                     trHTML += "<td>" + object["smoking_status"] + "</td>";
                     trHTML += "<td>" + object["stroke"] + "</td>";
-                    trHTML += "<td>";
-                    trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showStudentUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
-                    trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showStudentDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
+                    // trHTML += "<td>";
+                    // trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
+                    // trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
                     trHTML += "<tr>";
 
 
                     num++;
                 }
                 console.log(trHTML);
-                document.getElementById("mytable").innerHTML = trHTML;
-                document.getElementById("subheadTxt").innerText = "แสดงจำนวน " + (num - 1) + " จากทั้งหมด " + pageCount + " รายการ"
-                document.getElementById("pagebox").style.visibility = 'hidden';
                 //document.getElementById("resetbt").style.visibility = 'visible';
                 //document.getElementById("pagebox").remove()
                 if (num == "1") {
@@ -118,22 +115,25 @@ function loadQueryTable() {
                         footer: '<a href="table.html">Reload data</a>'
                     })
                     document.getElementById("tableArea").style.visibility = 'hidden';
-                }else{
+                } else {
+                    document.getElementById("mytable").innerHTML = trHTML;
+                    document.getElementById("subheadTxt").innerText = "แสดงจำนวน " + (num - 1) + " จากทั้งหมด " + pageCount + " รายการ"
+                    document.getElementById("pagebox").style.visibility = 'hidden';
                     const Toast = Swal.mixin({
                         toast: true,
-                        position: 'bottom',
+                        position: 'top',
                         showConfirmButton: false,
                         timer: 3000,
                         timerProgressBar: true,
                         didOpen: (toast) => {
-                          toast.addEventListener('mouseenter', Swal.stopTimer)
-                          toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
                         }
-                      })
-                      Toast.fire({
+                    })
+                    Toast.fire({
                         icon: 'success',
-                        title: 'พบ '+ searchText + ' จำนวน ' + (num-1) + ' รายการ'
-                      })
+                        title: 'พบ ' + searchText + ' จำนวน ' + (num - 1) + ' รายการ'
+                    })
                 }
             }
         };
@@ -188,12 +188,12 @@ function showStudentCreateBox() {
 
         focusConfirm: false,
         preConfirm: () => {
-            slistCreate();
+            dataCreate();
         },
     });
 }
 
-function slistCreate() {
+function dataCreate() {
     const gender = document.getElementById("gender").value;
     const age = document.getElementById("age").value;
     const hypertension = document.getElementById("hypertension").value;
@@ -246,25 +246,25 @@ function slistCreate() {
             const objects = JSON.parse(this.responseText);
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'bottom',
+                position: 'top',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
-              })
-              Toast.fire({
+            })
+            Toast.fire({
                 icon: 'success',
                 title: 'Create successfully!'
-              })
+            })
             loadPage();
         }
     };
 }
 
-function showStudentDeleteBox(id) {
+function showDeleteBox(id) {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -275,7 +275,7 @@ function showStudentDeleteBox(id) {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            studentDelete(id);
+            dataDelete(id);
             Swal.fire(
                 'Deleted!',
                 'Your file has been deleted.',
@@ -283,10 +283,9 @@ function showStudentDeleteBox(id) {
             )
         }
     })
-
 }
 
-function studentDelete(id) {
+function dataDelete(id) {
     console.log("Delete: ", id);
     const xhttp = new XMLHttpRequest();
     xhttp.open("DELETE", "http://localhost:3000/brainstroke/delete");
@@ -298,28 +297,27 @@ function studentDelete(id) {
     );
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4) {
-            const objects = JSON.parse(this.responseText);
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'bottom',
+                position: 'top',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
-              })
-              Toast.fire({
+            })
+            Toast.fire({
                 icon: 'success',
                 title: 'Delete Successfully.'
-              })
+            })
             loadPage();
         }
     };
 }
 
-function showStudentUpdateBox(id) {
+function showUpdateBox(id) {
     console.log("edit", id);
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", "http://localhost:3000/brainstroke/" + id);
@@ -327,12 +325,12 @@ function showStudentUpdateBox(id) {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             const object = JSON.parse(this.responseText).Complaint;
-            console.log("showStudentUpdateBox", object);
+            console.log("showUpdateBox", object);
             Swal.fire({
                 title: "Update",
                 html:
-                    '<div class="mb-3"><label for="id" class="form-label">id</label>' +
-                    '<input class="form-control" id="id" placeholder="id" value="' + object["_id"] + '" readonly></div>' +
+
+                    '<input class="form-control" type="hidden" id="id" placeholder="id" value="' + object["_id"] + '" readonly></div>' +
 
                     '<div class="mb-3"><label for="gender" class="form-label">Gender</label>' +
                     '<input class="form-control" id="gender" placeholder="gender" value="' + object["gender"] + '"></div>' +
@@ -432,20 +430,95 @@ function studentUpdate() {
             const objects = JSON.parse(this.responseText);
             const Toast = Swal.mixin({
                 toast: true,
-                position: 'bottom',
+                position: 'top',
                 showConfirmButton: false,
                 timer: 3000,
                 timerProgressBar: true,
                 didOpen: (toast) => {
-                  toast.addEventListener('mouseenter', Swal.stopTimer)
-                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
                 }
-              })
-              Toast.fire({
+            })
+            Toast.fire({
                 icon: 'success',
                 title: 'Update Successfully.'
-              })
+            })
             loadPage();
+        }
+    };
+}
+
+/* Experimental */
+function showData(id){
+    console.log("Click", id);
+    const xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://localhost:3000/brainstroke/" + id);
+    xhttp.send();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const object = JSON.parse(this.responseText).Complaint;
+            console.log("showUpdateBox", object);
+            // Swal.fire({
+            //     title: "Infomation",
+            //     html:
+
+            //         '<input class="form-control" type="hidden" id="id" placeholder="id" value="' + object["_id"] + '" readonly></div>' +
+
+            //         '<div class="mb-3"><label for="gender" class="form-label">Gender</label>' +
+            //         '<input class="form-control" id="gender" placeholder="gender" value="' + object["gender"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="age" class="form-label">Age</label>' +
+            //         '<input class="form-control" id="age" placeholder="age" value="' + object["age"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="hypertension" class="form-label">Hypertension</label>' +
+            //         '<input class="form-control" id="hypertension" placeholder="hypertension (0 or 1)" value="' + object["hypertension"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="heart_disease" class="form-label">Heart disease</label>' +
+            //         '<input class="form-control" id="heart_disease" placeholder="heart disease (0 or 1)" value="' + object["heart_disease"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="ever_married" class="form-label">Ever_married</label>' +
+            //         '<input class="form-control" id="ever_married" placeholder="ever_married (Yes or No)" value="' + object["ever_married"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="work_type" class="form-label">Work_type</label>' +
+            //         '<input class="form-control" id="work_type" placeholder="work_type" value="' + object["work_type"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="Residence_type" class="form-label">Residence_type</label>' +
+            //         '<input class="form-control" id="Residence_type" placeholder="Residence_type" value="' + object["Residence_type"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="avg_glucose_level" class="form-label">avg_glucose_level</label>' +
+            //         '<input class="form-control" id="avg_glucose_level" placeholder="avg_glucose_level" value="' + object["avg_glucose_level"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="bmi" class="form-label">bmi</label>' +
+            //         '<input class="form-control" id="bmi" placeholder="bmi" value="' + object["bmi"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="smoking_status" class="form-label">smoking_status</label>' +
+            //         '<input class="form-control" id="smoking_status" placeholder="smoking_status" value="' + object["smoking_status"] + '"></div>' +
+
+            //         '<div class="mb-3"><label for="stroke" class="form-label">stroke</label>' +
+            //         '<input class="form-control" id="stroke" placeholder="stroke" value="' + object["stroke"] + '"></div>',
+
+            //     focusConfirm: false,
+            //     preConfirm: () => {
+            //         studentUpdate();
+            //     },
+            // });
+            Swal.fire({
+                title: 'What you do want to with this item?',
+                text: "item id : "+id,
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Update',
+                denyButtonText: `Delete`,
+                // background: "white",
+                // grow:"false",
+              }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                  showUpdateBox(id)
+                } else if (result.isDenied) {
+                  showDeleteBox(id)
+                }
+              })
         }
     };
 }
