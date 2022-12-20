@@ -33,13 +33,14 @@ app.get('/brainstroke/createpage', async (req, res) => {
 })
 
 //ใช้เพื่อดึงข้อมูลมาแสดงในหน้านั้นๆ
-app.get('/brainstroke/p/:page', async (req, res) => {
+app.get('/brainstroke/p/:page/:list_item', async (req, res) => {
     const { params } = req;
     let page = parseInt(params.page)
-    page = page*250
+    let skipy = parseInt(params.list_item)
+    page = page*skipy
     await client.connect();
     const results = await client.db('mydb').collection('brainstroke').estimatedDocumentCount();
-    const objects = await client.db('mydb').collection('brainstroke').find({}).skip(page).limit(250).toArray();
+    const objects = await client.db('mydb').collection('brainstroke').find({}).skip(page).limit(skipy).toArray();
     await client.close();
     res.status(200).send({
         "objects":objects,

@@ -15,7 +15,7 @@
             integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
             crossorigin="anonymous" />
 
-        <title>Experiment | BrainStroke</title>
+        <title>Lab | BrainStroke</title>
         <link href="index.css" rel="stylesheet">
         <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>
@@ -26,7 +26,7 @@
             <div class="bd-highlight mb-3">
                 <nav class="navbar navbar-expand-lg bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="#"><b>BrainStroke</b></a>
+                        <a class="navbar-brand" href="#"><b>BrainStrokeV1.5</b></a>
                         <button class="navbar-toggler" type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#navbarScroll"
@@ -50,7 +50,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link active"
-                                        href="experiment.html">Experiment</a>
+                                        href="Lab.html">Lab</a>
                                 </li>
                             </ul>
                         </div>
@@ -93,11 +93,21 @@
                             <h5 class="card-title"><b>Duplicate data</b></h5>
                             <p class="card-text">คัดลอกข้อมูลเดิมและเพิ่มไปยังฐานข้อมูลเดิม</p>
                             <div class="mb-2">
-                                <label for="formCount" class="form-label">จำนวนครั้งที่ต้องการเพิ่ม</label>
-                                <input type="number" value="1" class="form-control" id="formCount" placeholder="จำนวนครั้ง">
+                                <label for="formCount" class="form-label">จำนวนครั้งที่ต้องการเพิ่ม (1-3)</label>
+                                <input type="number" min="1" max="3" value="1" class="form-control" id="formCount" placeholder="จำนวนครั้ง">
                               </div>
                             <button onclick="duplicate_data_fn()" class="btn 
                                 btn-secondary" >COPY</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><b>Counting data</b></h5>
+                            <p class="card-text">นับจำนวนข้อมูลทั้งหมดในเอกสาร</p>
+                            <button onclick="#" disabled class="btn 
+                                btn-success" >Count</button>
                         </div>
                     </div>
                 </div>
@@ -106,7 +116,7 @@
 
         </div>
 
-        <script src="experiment.js"></script>
+        <script src="Lab.js"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.16/dist/sweetalert2.all.min.js"></script>
         <script
