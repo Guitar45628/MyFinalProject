@@ -1,3 +1,4 @@
+/*---Requirement---*/
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -8,15 +9,18 @@ const client = new MongoClient(uri);
 app.use(cors())
 app.use(express.json());
 
+/*---Connect to port---*/
 app.listen(port, () => {
     console.log(`App is running on http://localhost:${port}`)
 })
 
+/*---Redirect to main---*/
 app.get('/', (req, res) => {
     // res.send('Hello Welcome to brainstroke system')
     res.redirect('/brainstroke');
 })
 
+/*---Get Data With Limit---*/
 app.get('/brainstroke', async (req, res) => {
     await client.connect();
     const objects = await client.db('mydb').collection('brainstroke').find({}).limit(200).toArray();
@@ -24,7 +28,7 @@ app.get('/brainstroke', async (req, res) => {
     res.status(200).send(objects);
 })
 
-//นับจำนวนเอกสารเพื่อสร้างจำนวนหน้า
+/*---Count Doc For Create Pagination---*/
 app.get('/brainstroke/createpage', async (req, res) => {
     await client.connect();
     const results = await client.db('mydb').collection('brainstroke').estimatedDocumentCount();
@@ -32,7 +36,7 @@ app.get('/brainstroke/createpage', async (req, res) => {
     res.status(200).send({results});
 })
 
-//ใช้เพื่อดึงข้อมูลมาแสดงในหน้านั้นๆ
+/*---Query db with pagination---*/
 app.get('/brainstroke/p/:page/:list_item', async (req, res) => {
     const { params } = req;
     let page = parseInt(params.page)
@@ -47,7 +51,7 @@ app.get('/brainstroke/p/:page/:list_item', async (req, res) => {
         "documentCount": results});
 })
 
-//ใช้สำหรับ
+/*---Query All data for Dashboard---*/
 app.get('/brainstroke/gender', async (req, res) => {
     const client = new MongoClient(uri);
     await client.connect();
@@ -58,6 +62,8 @@ app.get('/brainstroke/gender', async (req, res) => {
         "Complaint": objects
     });
 })
+
+/*---Query data with selected gender---*/
 app.get('/brainstroke/gender/:genderText', async (req, res) => {
     const { params } = req;
     const genderText = params.genderText
@@ -83,6 +89,7 @@ app.get('/brainstroke/gender/:genderText', async (req, res) => {
 
 })
 
+/*---Create new document to Database---*/
 app.post('/brainstroke/create', async (req, res) => {
     const object = req.body;
     const client = new MongoClient(uri);
@@ -109,6 +116,7 @@ app.post('/brainstroke/create', async (req, res) => {
     })
 })
 
+/*---Update document in Database---*/
 app.put('/brainstroke/update', async (req, res) => {
     const object = req.body;
     const id = object._id;
@@ -138,6 +146,7 @@ app.put('/brainstroke/update', async (req, res) => {
     });
 })
 
+/*---Delete document in Database---*/
 app.delete('/brainstroke/delete', async (req, res) => {
     const id = req.body._id;
     const client = new MongoClient(uri);
@@ -150,6 +159,7 @@ app.delete('/brainstroke/delete', async (req, res) => {
     });
 })
 
+/*---Query data with text search---*/
 app.get('/brainstroke/search/:searchText', async (req, res) => {
     const { params } = req;
     const searchText = params.searchText
@@ -166,6 +176,7 @@ app.get('/brainstroke/search/:searchText', async (req, res) => {
     });
 })
 
+/*---Query data with ID---*/
 app.get('/brainstroke/:id', async (req, res) => {
     const id = req.params.id;
     const client = new MongoClient(uri);
@@ -178,6 +189,12 @@ app.get('/brainstroke/:id', async (req, res) => {
         "Complaint": object
     });
 })
+
+
+
+
+
+
 
 /*---Experiment---*/
 
