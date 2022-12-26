@@ -3,6 +3,7 @@ function delete_all_data_fn() {
     const uri = "http://localhost:3000/experiment/clean"
     xhttp.open("DELETE", uri)
     Swal.fire({
+        customClass:'swal-box-lab',
         title: 'ดำเนินการต่อหรือไม่?',
         text: "การดำเนินการนี้จะเปลี่ยนแปลงข้อมูลทั้งหมด!",
         icon: 'warning',
@@ -15,9 +16,11 @@ function delete_all_data_fn() {
         if (result.isConfirmed) {
             xhttp.send()
             Swal.fire(
-                'การลบเสร็จสิ้น!',
-                'ข้อมูลต่างๆได้ถูกลบไปหมดแล้ว',
-                'เสร็จสมบูรณ์'
+                {
+                    customClass:'swal-box-lab',
+                    title:'การลบเสร็จสิ้น!',
+                text:'ข้อมูลต่างๆได้ถูกลบไปหมดแล้ว'}
+                
             )
         }
     })
@@ -28,6 +31,7 @@ function restore_all_data_fn() {
     const uri = "http://localhost:3000/experiment/restore"
     xhttp.open("GET", uri)
     Swal.fire({
+        customClass:'swal-box-lab',
         title: 'ดำเนินการต่อหรือไม่?',
         text: "การดำเนินการนี้จะเปลี่ยนแปลงข้อมูลทั้งหมด!",
         icon: 'warning',
@@ -39,10 +43,9 @@ function restore_all_data_fn() {
     }).then((result) => {
         if (result.isConfirmed) {
             xhttp.send()
-            Swal.fire(
-                'ซ่อมแซมไฟล์เสร็จแล้ว',
-                'ข้อมูลต่างๆได้ถูกคืนค่าเป็นชุดข้อมูลดั้งเดิมแล้ว',
-                'สำเร็จ'
+            Swal.fire({customClass:'swal-box-lab',
+                title:'ซ่อมแซมไฟล์เสร็จแล้ว',
+                text:'ข้อมูลต่างๆได้ถูกคืนค่าเป็นชุดข้อมูลดั้งเดิมแล้ว'}
             )
         }
     })
@@ -54,6 +57,7 @@ function duplicate_data_fn() {
     const uri = "http://localhost:3000/experiment/duplicate/" + parseInt(round)
     xhttp.open("GET", uri)
     Swal.fire({
+        customClass:'swal-box-lab',
         title: 'ดำเนินการต่อหรือไม่?',
         text: "การดำเนินการนี้จะเปลี่ยนแปลงข้อมูลทั้งหมด!",
         icon: 'warning',
@@ -66,10 +70,31 @@ function duplicate_data_fn() {
         if (result.isConfirmed) {
             xhttp.send()
             Swal.fire(
-                'Copyed!',
-                'Your file has been restored.',
-                'success'
+                {customClass:'swal-box-lab',
+                title:'ทำซ้ำข้อมูลเสร็จแล้ว',
+                text:'ข้อมูลได้ถูกทำซ้ำเรียบร้อยแล้ว'}
             )
         }
     })
+}
+
+function counting_data_fn() {
+    const xhttp = new XMLHttpRequest();
+    const uri = "http://localhost:3000/brainstroke/createpage";
+    xhttp.open("GET", uri);
+    xhttp.send();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var documentCount = JSON.parse(this.responseText).results;
+            console.log(documentCount)
+            Swal.fire({
+                customClass:'swal-box-lab',
+                icon: 'info',
+                title: 'จำนวนเอกสารที่พบ!',
+                text: 'จำนวน '+(documentCount)+' รายการ'}
+            )
+            
+        }
+        
+    };
 }

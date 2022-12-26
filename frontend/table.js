@@ -23,6 +23,8 @@ function createPage() {
             document.getElementById("page_select").innerHTML = optionHTML;
         }
         if (page_selected<=page){
+            ring = document.getElementById("ring")
+            ring.style.visibility = 'visible'
             loadPage()
         }else{
             console.log("Out of page it will return to first page")
@@ -75,6 +77,8 @@ function loadFirstPageForFix() {
                 document.getElementById("subheadTxt").innerText = subText
                 document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5"><div class="spinner-border"></div></th></tr>';
             } else {
+                ring = document.getElementById("ring")
+                ring.style.visibility = 'visible'
                 document.getElementById("mytable").innerHTML = trHTML;
                 document.getElementById("subheadTxt").innerText = "แสดงจำนวน " + (num - 1) + " จากทั้งหมด " + documentCount + " รายการ"
             }
@@ -83,6 +87,8 @@ function loadFirstPageForFix() {
 }
 
 function loadPage() {
+    ring = document.getElementById("ring")
+    ring.style.visibility = 'visible'
     var page_selected = parseInt(document.getElementById("page_select").value);
     var skippy = parseInt(document.getElementById("list_item").value);
     const xhttp = new XMLHttpRequest();
@@ -124,6 +130,8 @@ function loadPage() {
                 document.getElementById("subheadTxt").innerText = subText
                 document.getElementById("mytable").innerHTML = '<tr><th scope="row" colspan="5"><div class="spinner-border"></div></th></tr>';
             } else {
+                ring = document.getElementById("ring")
+                ring.style.visibility = 'collapse'
                 document.getElementById("mytable").innerHTML = trHTML;
                 document.getElementById("subheadTxt").innerText = "แสดงจำนวน " + (num - 1) + " จากทั้งหมด " + documentCount + " รายการ"
             }
@@ -161,8 +169,8 @@ function loadQueryTable() {
                     trHTML += "<td>" + object["smoking_status"] + "</td>";
                     trHTML += "<td>" + object["stroke"] + "</td>";
                     // trHTML += "<td>";
-                    // trHTML += '<a type="button" class="btn btn-outline-secondary me-2" onclick="showUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
-                    // trHTML += '<a type="button" class="btn btn-outline-danger" onclick="showDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
+                    // trHTML += '<a type="button" onclick="showUpdateBox(\'' + object["_id"] + '\')"><i class="fas fa-edit"></i></a>';
+                    // trHTML += '<a type="button" onclick="showDeleteBox(\'' + object["_id"] + '\')"><i class="fas fa-trash"></i></a>';
                     trHTML += "<tr>";
 
 
@@ -180,6 +188,7 @@ function loadQueryTable() {
                     })
                     document.getElementById("tableArea").style.visibility = 'hidden';
                 } else {
+                    document.getElementById("tableArea").style.visibility = 'visible';
                     document.getElementById("mytable").innerHTML = trHTML;
                     document.getElementById("subheadTxt").innerText = "แสดงจำนวน " + (num - 1) + " จากทั้งหมด " + pageCount + " รายการ"
                     document.getElementById("pagebox").style.visibility = 'hidden';
@@ -218,38 +227,38 @@ function showStudentCreateBox() {
         customClass: 'swal-box',
         html:
             '<div class="align-left" >'+
-            '<div class="mb-3"><label for="gender" class="form-label">Gender</label>' +
-            '<input class="form-control" id="gender" placeholder="gender"></div>' +
+            '<div class="mb-3"><b><label for="gender" class="form-label">Gender</label></b>' +
+            '<select class="form-control" name="gender" id="gender"> <option value="Male">Male</option> <option value="Female">Female</option> </select></div>' +
 
-            '<div class="mb-3"><label for="age" class="form-label">Age</label>' +
-            '<input class="form-control" id="age" placeholder="age"></div>' +
+            '<div class="mb-3"><b><label for="age" class="form-label">Age</label></b></b>' +
+            '<input class="form-control" type="number" id="age" placeholder="age"></div>' +
 
-            '<div class="mb-3"><label for="hypertension" class="form-label">Hypertension</label>' +
-            '<input class="form-control" id="hypertension" placeholder="hypertension (0 or 1)"></div>' +
+            '<div class="mb-3"><b><label for="hypertension" class="form-label">Hypertension</label></b>' +
+            '<select class="form-control" name="hypertension" id="hypertension"> <option value="0">0</option> <option value="1">1</option> </select></div>' +
 
-            '<div class="mb-3"><label for="heart_disease" class="form-label">Heart disease</label>' +
-            '<input class="form-control" id="heart_disease" placeholder="heart disease (0 or 1)"></div>' +
+            '<div class="mb-3"><b><label for="heart_disease" class="form-label">Heart disease</label></b>' +
+            '<select class="form-control" name="heart_disease" id="heart_disease"> <option value="0">0</option> <option value="1">1</option> </select></div>' +
 
-            '<div class="mb-3"><label for="ever_married" class="form-label">Ever_married</label>' +
-            '<input class="form-control" id="ever_married" placeholder="ever_married (Yes or No)"></div>' +
+            '<div class="mb-3"><b><label for="ever_married" class="form-label">Ever_married</label></b>' +
+            '<select class="form-control" name="ever_married" id="ever_married"> <option value="Yes">Yes</option> <option value="No">No</option> </select></div>' +
 
-            '<div class="mb-3"><label for="work_type" class="form-label">Work_type</label>' +
-            '<input class="form-control" id="work_type" placeholder="work_type"></div>' +
+            '<div class="mb-3"><b><label for="work_type" class="form-label">Work_type</label></b>' +
+            '<select class="form-control" name="work_type" id="work_type"> <option value="children">Children</option> <option value="Govtjov">Govtjov</option> <option value="Neverworked">Neverworked</option> <option value="Private">Private</option> <option value="Self-employed">Self-employed</option> </select></div>' +
 
-            '<div class="mb-3"><label for="Residence_type" class="form-label">Residence_type</label>' +
-            '<input class="form-control" id="Residence_type" placeholder="Residence_type"></div>' +
+            '<div class="mb-3"><b><label for="Residence_type" class="form-label">Residence_type</label></b>' +
+            '<select class="form-control" name="Residence_type" id="Residence_type"> <option value="Rural">Rural</option> <option value="Urban">Urban</option> </select></div>' +
 
-            '<div class="mb-3"><label for="avg_glucose_level" class="form-label">avg_glucose_level</label>' +
+            '<div class="mb-3"><b><label for="avg_glucose_level" class="form-label">avg_glucose_level</label></b>' +
             '<input class="form-control" id="avg_glucose_level" placeholder="avg_glucose_level"></div>' +
 
-            '<div class="mb-3"><label for="bmi" class="form-label">bmi</label>' +
+            '<div class="mb-3"><b><label for="bmi" class="form-label">bmi</label></b>' +
             '<input class="form-control" id="bmi" placeholder="bmi"></div>' +
 
-            '<div class="mb-3"><label for="smoking_status" class="form-label">smoking_status</label>' +
-            '<input class="form-control" id="smoking_status" placeholder="smoking_status"></div>' +
+            '<div class="mb-3"><b><label for="smoking_status" class="form-label">smoking_status</label></b>' +
+            '<select class="form-control" name="smoking_status" id="smoking_status"> <option value="formerly smoked">Formerly smoked</option> <option value="never smoked">Never smoked</option> <option value="smokes">Smokes</option> <option value="Unknown">Unknown</option> </select></div>' +
 
-            '<div class="mb-3"><label for="stroke" class="form-label">stroke</label>' +
-            '<input class="form-control" id="stroke" placeholder="stroke"></div>'+
+            '<div class="mb-3"><b><label for="stroke" class="form-label">stroke</label></b>' +
+            '<select class="form-control" name="stroke" id="stroke"> <option value="0">0</option> <option value="1">1</option> </select></div>'+
             '</div>',
 
         focusConfirm: false,

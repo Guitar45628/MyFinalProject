@@ -19,6 +19,8 @@
         <link href="index.css" rel="stylesheet">
         <script type="text/javascript"
             src="https://www.gstatic.com/charts/loader.js"></script>
+            <!-- favicons -->
+            <link rel="icon" href="brain.png" sizes="32x32" type="image/png">
     </head>
     <body>
         <div class="container">
@@ -26,7 +28,7 @@
             <div class="bd-highlight mb-3">
                 <nav class="navbar navbar-expand-lg bg-light">
                     <div class="container-fluid">
-                        <a class="navbar-brand" href="#"><b>BrainStrokeV1.5</b></a>
+                        <a class="navbar-brand" href="#"><b>BrainStrokeV1.6</b></a>
                         <button class="navbar-toggler" type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#navbarScroll"
@@ -63,8 +65,8 @@
 
             <!--Grid-->
             <div class="row">
-                <div class="col-sm-6">
-                    <div class="card">
+                <div class="col-sm-12">
+                    <div class="card" style="margin: 10px;">
                         <div class="card-body">
                             <h5 class="card-title"><b>Delete All Data</b></h5>
                             <p class="card-text">ลบข้อมูลทั้งหมดที่มีในฐานข้อมูล
@@ -73,9 +75,7 @@
                                 btn-danger">DELETE</button>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card">
+                    <div class="card" style="margin: 10px;">
                         <div class="card-body">
                             <h5 class="card-title"><b>Restore all data</b></h5>
                             <p class="card-text">คืนค่าข้อมูลทั้งหมดจากฐานข้อมูลต้นฉบับ
@@ -84,11 +84,7 @@
                                 btn-primary">Restore</button>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-6">
-                    <div class="card">
+                    <div class="card" style="margin: 10px;">
                         <div class="card-body">
                             <h5 class="card-title"><b>Duplicate data</b></h5>
                             <p class="card-text">คัดลอกข้อมูลเดิมและเพิ่มไปยังฐานข้อมูลเดิม</p>
@@ -100,13 +96,11 @@
                                 btn-secondary" >COPY</button>
                         </div>
                     </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="card">
+                    <div class="card" style="margin: 10px;">
                         <div class="card-body">
                             <h5 class="card-title"><b>Counting data</b></h5>
                             <p class="card-text">นับจำนวนข้อมูลทั้งหมดในเอกสาร</p>
-                            <button onclick="#" disabled class="btn 
+                            <button onclick="counting_data_fn()" class="btn 
                                 btn-success" >Count</button>
                         </div>
                     </div>

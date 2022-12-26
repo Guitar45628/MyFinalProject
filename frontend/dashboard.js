@@ -213,7 +213,7 @@ function loadGraph(objects) {
 
     //กราฟ 2
     var dataMarriage = google.visualization.arrayToDataTable([
-        ["Married", "Other"],
+        ["Yes", "No"],
         ["22", freeCount], ["22", freeCount],
         ["Married", marriedCount],
         ["Other", nomarriedCount]
